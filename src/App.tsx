@@ -1,15 +1,9 @@
-import { useEffect } from 'react';
-import { auth } from '../src/firebase'
-function App() {
+import Login from './pages/auth/Login';
+export default function App() {
 
-  useEffect(() => {
-    console.log(auth)
-  })
   return (
     <>
-      <h1 className="text-3xl text-amber-400 font-bold underline">Hello world!</h1>
+      <Login />
     </>
   );
 }
-
-export default App;
