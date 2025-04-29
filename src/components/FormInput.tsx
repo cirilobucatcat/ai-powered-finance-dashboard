@@ -15,7 +15,7 @@ export function FormInput<T extends FieldValues>({
   return (
     <div className={`${containerClass}`}>
       {label && (
-        <label htmlFor={name} className="block mb-1 font-medium">
+        <label htmlFor={name} className="block mb-1 font-medium text-sm text-lime-800">
           {label}
         </label>
       )}
@@ -23,7 +23,7 @@ export function FormInput<T extends FieldValues>({
         id={name}
         type={type}
         placeholder={placeholder}
-        className={`w-full border border-blue-500 py-2 px-3 rounded ${className}`}
+        className={`w-full border-b-2 bg-lime-50 border-lime-800 outline-lime-800 p-3 text-sm ${className}`}
         {...register(name)}
       />
       {error && <ErrorMessage message={error.message} />}

@@ -1,9 +1,9 @@
-import Login from './pages/auth/Login';
+import RegisterAndLogin from './pages/auth/RegisterAndLogin';
 export default function App() {
 
   return (
     <>
-      <Login />
+      <RegisterAndLogin />
     </>
   );
 }

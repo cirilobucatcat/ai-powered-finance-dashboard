@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+body {
+    font-family: "Open Sans", 'Sour Gummy', sans-serif;
+}
+
+@theme {
+    --font-open-sans: "Open Sans", sans-serif;
+    --font-sour-gummy: "Sour Gummy", sans-serif;
+}
