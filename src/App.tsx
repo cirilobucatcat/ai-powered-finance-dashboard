@@ -2,7 +2,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import RegisterAndLogin from './pages/auth/RegisterAndLogin';
 import PrivateRoute from './components/PrivateRoute';
-import Dashboard from './pages/Dashboard';
+import Transaction from './pages/main/Transaction';
+import Dashboard from './pages/main/Dashboard';
 export default function App() {
 
   return (<AuthProvider>
@@ -14,6 +15,14 @@ export default function App() {
           element={
             <PrivateRoute>
               <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/transactions"
+          element={
+            <PrivateRoute>
+              <Transaction />
             </PrivateRoute>
           }
         />

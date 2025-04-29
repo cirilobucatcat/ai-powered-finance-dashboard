@@ -8,12 +8,7 @@ interface PrivateRouteProps {
 function PrivateRoute({ children }: PrivateRouteProps) {
 
     const { user } = useAuth();
-
-    if (!user) {
-        return <Navigate to="/" replace />;
-    }
-
-    return <>{children}</>;
+    return user ? <>{children}</> : <Navigate to="/" replace />;
 }
 
 export default PrivateRoute;

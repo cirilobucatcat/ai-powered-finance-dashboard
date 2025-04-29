@@ -6,6 +6,11 @@ import { IoKeyOutline } from "react-icons/io5";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useLoading } from "@/hooks/loading";
 import { FormInput } from "@/components/FormInput";
+import { useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useAuth } from "@/context/AuthContext";
+import { auth } from "@/firebase";
+import { FirebaseError } from "firebase/app";
 
 const loginSchema = z.object({
     email: z
@@ -19,6 +24,8 @@ const loginSchema = z.object({
 type LoginSchema = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
+
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -28,15 +35,20 @@ export default function LoginForm() {
     });
 
     const { isLoading, startLoading, stopLoading } = useLoading();
+    const { login } = useAuth();
 
     const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
-        try {
-            startLoading();
-            await new Promise((resolve) => setTimeout(resolve, 2000));
-            console.log(data);
-        } finally {
-            stopLoading();
-        }
+        startLoading();
+        let { email, password } = data;
+        await signInWithEmailAndPassword(auth, email, password)
+            .then(user => {
+                login(user.user)
+                navigate('/dashboard')
+            })
+            .catch((error: FirebaseError) => {
+                console.log(error.code)
+            })
+            .finally(() => stopLoading())
     };
     return (<form
         onSubmit={handleSubmit(onSubmit)}

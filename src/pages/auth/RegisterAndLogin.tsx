@@ -1,12 +1,19 @@
 
 import AuthHero from "./Auth/Hero";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoginForm from "./Auth/LoginForm";
 import RegisterForm from "./Auth/RegisterForm";
+import { useAuth } from "@/context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterAndLogin() {
   const [tab, setTab] = useState<'login' | 'register'>('login');
-
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    if(user) navigate('/dashboard')
+  })
 
   return (
     <div className='w-full h-screen grid grid-cols-2 gap-2 bg-lime-50 p-6'>
