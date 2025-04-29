@@ -5,6 +5,7 @@ import { FormInput } from "../../../components/FormInput";
 import { useLoading } from "../../../hooks/loading";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { IoKeyOutline } from "react-icons/io5";
+import { AiOutlineLoading } from "react-icons/ai";
 
 const loginSchema = z.object({
     email: z
@@ -74,9 +75,9 @@ export default function LoginForm() {
         <button
             type="submit"
             disabled={isLoading}
-            className="bg-lime-800 text-white w-full py-2 px-3 rounded disabled:opacity-75 cursor-pointer disabled:cursor-not-allowed"
+            className="bg-lime-800 flex justify-center items-center text-white w-full text-sm p-3 rounded disabled:opacity-75 cursor-pointer disabled:cursor-not-allowed"
         >
-            {isLoading ? "Loading..." : "Login"}
+            {isLoading ? <AiOutlineLoading className="animate-spin" size={20}/> : "Login"}
         </button>
     </form>)
 }
