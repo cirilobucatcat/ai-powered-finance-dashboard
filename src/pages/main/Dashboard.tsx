@@ -1,10 +1,10 @@
 import { useAuth } from "@/context/AuthContext";
 
 export default function Dashboard() {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   return (
     <>
-      <p>Dashboard</p>
+      <p>Welcome, {user?.displayName}</p>
       <button onClick={logout}>Logout</button>
     </>
   );

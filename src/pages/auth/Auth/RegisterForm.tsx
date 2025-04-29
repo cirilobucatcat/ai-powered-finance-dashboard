@@ -7,6 +7,9 @@ import { FaRegUser } from "react-icons/fa";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useLoading } from "@/hooks/loading";
 import { FormInput } from "@/components/FormInput";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "@/firebase";
+import { useNavigate } from "react-router-dom";
 
 const registerSchema = z.object({
     full_name: z.string({ message: "Full Name is required" })
@@ -31,15 +34,18 @@ export default function RegisterForm() {
     });
 
     const { isLoading, startLoading, stopLoading } = useLoading();
+    const navigate = useNavigate();
 
     const onSubmit: SubmitHandler<RegisterSchema> = async (data) => {
-        try {
-            startLoading();
-            await new Promise((resolve) => setTimeout(resolve, 2000));
-            console.log(data);
-        } finally {
-            stopLoading();
-        }
+
+        let { full_name, email, password } = data;
+        const { user } = await createUserWithEmailAndPassword(auth, email, password);
+        
+        startLoading();
+        await updateProfile(user, { displayName: full_name })
+            .then(() => navigate('dashboard'))
+            .finally(() => stopLoading());
+
     };
     return (<form
         onSubmit={handleSubmit(onSubmit)}
