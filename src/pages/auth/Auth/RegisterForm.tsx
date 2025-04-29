@@ -1,12 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as z from "zod";
-import { FormInput } from "../../../components/FormInput";
-import { useLoading } from "../../../hooks/loading";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { IoKeyOutline } from "react-icons/io5";
 import { FaRegUser } from "react-icons/fa";
 import { AiOutlineLoading } from "react-icons/ai";
+import { useLoading } from "@/hooks/loading";
+import { FormInput } from "@/components/FormInput";
 
 const registerSchema = z.object({
     full_name: z.string({ message: "Full Name is required" })
