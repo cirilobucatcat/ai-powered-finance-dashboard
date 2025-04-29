@@ -3,6 +3,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import * as z from "zod";
 import { FormInput } from "../../../components/FormInput";
 import { useLoading } from "../../../hooks/loading";
+import { MdOutlineAlternateEmail } from "react-icons/md";
+import { IoKeyOutline } from "react-icons/io5";
 
 const loginSchema = z.object({
     email: z
@@ -54,6 +56,7 @@ export default function LoginForm() {
             className="w-full"
             placeholder="Enter your email"
             containerClass="w-full"
+            prependIcon={<MdOutlineAlternateEmail color="#3d6300" size={20} />}
         />
 
         <FormInput
@@ -65,6 +68,7 @@ export default function LoginForm() {
             className="w-full"
             placeholder="Enter your password"
             containerClass="w-full"
+            prependIcon={<IoKeyOutline color="#3d6300" size={20} />}
         />
 
         <button

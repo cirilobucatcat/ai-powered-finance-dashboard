@@ -1,6 +1,7 @@
 import { FieldError, FieldValues, Path, UseFormRegister } from "react-hook-form";
 
 export interface FormInputProps<T extends FieldValues> {
+    prependIcon?: React.ReactNode
     name: Path<T>;
     label?: string;
     type?: string;
