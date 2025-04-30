@@ -10,25 +10,68 @@ import { ChartData } from "chart.js";
 export default function Dashboard() {
   const { user } = useAuth();
 
-  const barChartData: ChartData<'line'> = {
-    labels: ['Red', 'Blue', 'Yellow'],
+  const barChartData: ChartData<'bar'> = {
+    labels: ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
     datasets: [
       {
-        label: 'Votes',
-        data: [12, 19, 3],
-        backgroundColor: ['red', 'blue', 'yellow'],
-        tension: 0.4,
-        fill: true
+        label: 'Income',
+        data: [12, 20, 10, 50, 10, 10, 19, 3],
+        borderWidth: 1,
+        backgroundColor: (context: any) => {
+          const chart = context.chart;
+          const { ctx, chartArea } = chart;
+          if (!chartArea) return null;
+
+          const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+          gradient.addColorStop(0, 'rgba(35, 35, 255, 1)');
+          
+          gradient.addColorStop(1, 'rgba(29,41,61, 0)');
+          return gradient;
+        },
+        borderColor: 'rgba(35, 35, 255, 1)',
+      },
+      {
+        label: 'Expenses',
+        data: [20, 10, 50, 10, 10, 12, 15, 10],
+        borderWidth: 1,
+        backgroundColor: (context: any) => {
+          const chart = context.chart;
+          const { ctx, chartArea } = chart;
+          if (!chartArea) return null;
+
+          const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+          gradient.addColorStop(0, 'rgba(255, 24, 24, 1)');
+          gradient.addColorStop(1, 'rgba(29,41,61, 0)');
+          return gradient;
+        },
+        borderColor: 'rgba(255, 24, 24, 1)',
+      },
+      {
+        label: 'Savings',
+        data: [10, 9, 1, 20, 10, 50, 10, 10],
+        borderWidth: 1,
+        backgroundColor: (context: any) => {
+          const chart = context.chart;
+          const { ctx, chartArea } = chart;
+          if (!chartArea) return null;
+
+          const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+          gradient.addColorStop(0, 'rgba(57, 255, 20, 1)');
+          gradient.addColorStop(1, 'rgba(29,41,61, 0)');
+          return gradient;
+        },
+        borderColor: 'rgba(57, 255, 20, 1)',
       },
     ],
   };
+
   return (
     <>
       <SEO title="Dashboard" />
       <div className="p-6 w-full flex flex-col">
         <div className="col-span-full">
-          <h2 className="text-electric-lime text-xl uppercase font-bold font-sour-gummy">Welcome Back, {user?.displayName}!</h2>
-          <p className="text-slate-300 text-sm font-medium">Good to see you again</p>
+          <h2 className="text-electric-lime text-3xl sm:text-xl uppercase font-bold font-sour-gummy">Welcome Back, {user?.displayName}!</h2>
+          <p className="text-slate-300 text-base sm:text-sm font-medium">Good to see you again</p>
         </div>
         <p className="text-slate-50 text-base font-bold tracking-wide mt-4 mb-3">Overview</p>
         <div className="flex flex-col md:flex-row items-center justify-center gap-4">
@@ -48,12 +91,14 @@ export default function Dashboard() {
             amount="₱ 10,000"
           />
         </div>
-        <p className="text-slate-50 text-base font-bold tracking-wide mt-4 mb-2">Overview</p>
-        <div className="bg-slate-900 p-6 rounded-lg">
-          <CChart type="line" data={barChartData} />
+        <div className="bg-slate-900 p-6 rounded-lg my-4">
+          <CChart 
+            type="bar" 
+            data={barChartData} 
+            options={{ responsive: true }} />
         </div>
         <div className="my-4 bg-slate-900 py-4 rounded-lg px-6">
-          <p className="text-slate-50 font-bold tracking-wide mt-4 mb-2 text-xl">AI Advise</p>
+          <p className="text-slate-50 font-bold tracking-wide mb-2 text-xl">AI Advise</p>
           <p className="text-slate-100 text-justify text-sm">✨Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusantium ipsum illum corrupti distinctio ratione et, vitae repudiandae, consequatur doloribus ipsa quis qui temporibus eveniet ducimus consectetur laboriosam. Nihil cupiditate aperiam quidem asperiores nostrum fuga repellat sunt officiis, necessitatibus veniam reiciendis vitae nulla earum consequuntur ratione saepe optio corporis culpa quae.</p>
         </div>
       </div>

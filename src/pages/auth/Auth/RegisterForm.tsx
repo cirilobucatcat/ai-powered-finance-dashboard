@@ -49,7 +49,7 @@ export default function RegisterForm() {
     };
     return (<form
         onSubmit={handleSubmit(onSubmit)}
-        className="px-3 sm:px-0 sm:w-1/2 h-3/4 flex flex-col items-center justify-start gap-4 font-open-sans"
+        className="px-2 w-full sm:px-0 sm:w-1/2 h-3/4 flex flex-col items-center justify-start gap-4 font-open-sans"
     >
         <div className="text-center sm:text-start w-full">
             <h1 className="text-md sm:text-xl uppercase font-bold text-electric-lime">
