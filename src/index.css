@@ -13,3 +13,7 @@ body {
     --color-siam: #5e604f;
     --color-hunter-green: #1b1d0e;
 }
+
+.nav-item {
+    @apply cursor-pointer flex gap-4 items-center text-slate-50 w-full py-2 my-2;
+}

@@ -31,7 +31,7 @@ export default function Dashboard() {
           <p className="text-slate-300 text-sm font-medium">Good to see you again</p>
         </div>
         <p className="text-slate-50 text-base font-bold tracking-wide mt-4 mb-3">Overview</p>
-        <div className="flex flex-row items-center justify-center gap-4">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-4">
           <DashboardCard
             title="Total Income"
             icon={<img src={money} width={40} />}
