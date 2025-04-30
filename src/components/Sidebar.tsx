@@ -2,11 +2,9 @@ import { useState } from "react"
 import { MdOutlineDashboard } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
-import { useAuth } from "@/context/AuthContext";
 
 export default function Sidebar() {
     const [show, setShow] = useState(true);
-    const { user } = useAuth();
 
     const navState = {
         'active': 'nav-item group transition-all border-e-4 border-electric-lime text-electric-lime',
@@ -43,7 +41,7 @@ export default function Sidebar() {
                     </NavLink>
                 </li>
             </ul>
-            <button className="cursor-pointer mt-auto mb-4 bg-electric-lime rounded-s-full rounded-e-full text-sm uppercase text-slate-900 font-bold py-2 mx-4">
+            <button className="cursor-pointer mt-auto mb-4 bg-electric-lime hover:bg-electric-lime/75 rounded-s-full rounded-e-full text-sm uppercase text-slate-900 font-bold py-2 mx-4">
                 Add Card
             </button>
         </div>
