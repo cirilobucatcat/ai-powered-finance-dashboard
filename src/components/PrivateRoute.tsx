@@ -8,7 +8,12 @@ interface PrivateRouteProps {
 function PrivateRoute({ children }: PrivateRouteProps) {
 
     const { user } = useAuth();
-    return user ? <>{children}</> : <Navigate to="/" replace />;
+    return user ? <>
+        <div className='flex w-full bg-slate-950'>
+            {/* <Sidebar /> */}
+            {children}
+        </div>
+    </> : <Navigate to="/" replace />;
 }
 
 export default PrivateRoute;

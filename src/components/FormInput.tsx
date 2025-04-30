@@ -16,7 +16,7 @@ export function FormInput<T extends FieldValues>({
   return (
     <div className={`relative ${containerClass}`}>
       {label && (
-        <label htmlFor={name} className="block mb-1 font-medium text-sm text-lime-800">
+        <label htmlFor={name} className="block mb-1 font-medium text-sm text-electric-lime">
           {label}
         </label>
       )}
@@ -25,7 +25,7 @@ export function FormInput<T extends FieldValues>({
         id={name}
         type={type}
         placeholder={placeholder}
-        className={`w-full border-b-2 bg-lime-50 border-lime-800 outline-lime-800 p-3 text-sm ${className} ${prependIcon ? 'pl-8' : 'px-3'}`}
+        className={`w-full border-2 rounded-sm bg-slate-800 border-electric-lime outline-electric-lime text-slate-50 p-3 text-sm ${className} ${prependIcon ? 'pl-8' : 'px-3'}`}
         {...register(name)}
       />
       {error && <ErrorMessage message={error.message} />}

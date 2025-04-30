@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
 body {
     font-family: "Open Sans", 'Sour Gummy', sans-serif;
 }
@@ -9,4 +7,9 @@ body {
 @theme {
     --font-open-sans: "Open Sans", sans-serif;
     --font-sour-gummy: "Sour Gummy", sans-serif;
+    --color-electric-lime: #CFFF04;
+    --color-avocado: #8e9568;
+    --color-beige: #f9faef;
+    --color-siam: #5e604f;
+    --color-hunter-green: #1b1d0e;
 }

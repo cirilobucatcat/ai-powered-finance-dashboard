@@ -55,10 +55,10 @@ export default function LoginForm() {
         className="px-3 sm:px-0 sm:w-1/2 h-3/4 flex flex-col items-center justify-start gap-4 font-open-sans"
     >
         <div className="text-center sm:text-start w-full">
-            <h1 className="text-md sm:text-xl uppercase font-bold text-lime-800">
+            <h1 className="text-md sm:text-xl uppercase font-bold text-electric-lime">
                 Sign in to your account
             </h1>
-            <p className="text-xs sm:text-sm text-lime-700">Enter your credentials to view all insights</p>
+            <p className="text-xs sm:text-sm text-slate-300">Enter your credentials to view all insights</p>
         </div>
         <FormInput
             name="email"
@@ -69,7 +69,7 @@ export default function LoginForm() {
             className="w-full"
             placeholder="Enter your email"
             containerClass="w-full"
-            prependIcon={<MdOutlineAlternateEmail color="#3d6300" size={20} />}
+            prependIcon={<MdOutlineAlternateEmail color="#cfff04" size={20} />}
         />
 
         <FormInput
@@ -81,13 +81,13 @@ export default function LoginForm() {
             className="w-full"
             placeholder="Enter your password"
             containerClass="w-full"
-            prependIcon={<IoKeyOutline color="#3d6300" size={20} />}
+            prependIcon={<IoKeyOutline color="#cfff04" size={20} />}
         />
 
         <button
             type="submit"
             disabled={isLoading}
-            className="bg-lime-800 flex justify-center items-center text-white w-full text-sm p-3 rounded disabled:opacity-75 cursor-pointer disabled:cursor-not-allowed"
+            className="bg-electric-lime flex justify-center items-center text-slate-900 w-full text-sm p-3 rounded disabled:opacity-75 cursor-pointer disabled:cursor-not-allowed"
         >
             {isLoading ? <AiOutlineLoading className="animate-spin" size={20}/> : "Login"}
         </button>

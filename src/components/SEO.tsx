@@ -1,9 +1,15 @@
-type SEOProps = {
+type SEOProps = | {
+    title: string,
+    description?: undefined,
+    name?: undefined,
+    type?: undefined
+} | {
     title: string,
     description: string,
     name: string,
     type: string
 }
+
 export default function SEO({ title, description, name, type }: SEOProps) {
     return (
         <>
