@@ -9,7 +9,7 @@ export default function Transaction() {
         <h1 className="text-electric-lime text-2xl uppercase font-bold mb-4">
           Transctions
         </h1>
-        <div className="flex items-end justify-between">
+        <div className="flex items-end justify-between space-x-4">
           <div className="relative">
             <CiSearch
               className="absolute top-2 left-2"
@@ -35,6 +35,7 @@ export default function Transaction() {
               </option>
             </select>
           </div>
+          <button className="bg-electric-lime px-4 py-2 rounded-sm font-bold uppercase text-sm hover:bg-electric-lime/85 cursor-pointer transition-colors delay-100 tracking-wide">Add Transaction</button>
         </div>
         <table className="text-electric-lime my-10 bg-slate-950 rounded-lg">
           <thead>
