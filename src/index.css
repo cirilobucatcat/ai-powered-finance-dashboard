@@ -4,6 +4,32 @@ body {
   font-family: "Open Sans", "Tomorrow", sans-serif;
 }
 
+/* custom-scrollbar.css */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #0f172b;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #cfff04;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #cfff04;
+}
+
+/* Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #cfff04 #0f172b;
+}
+
+
 @theme {
   --font-open-sans: "Open Sans", sans-serif;
   --font-tomorrow: "Tomorrow", sans-serif;
@@ -12,6 +38,20 @@ body {
   --color-beige: #f9faef;
   --color-siam: #5e604f;
   --color-hunter-green: #1b1d0e;
+}
+
+@layer utilities {
+  .animate-fade-in-up {
+    @apply opacity-0 translate-y-4 transition-all duration-300 ease-out;
+    animation: fadeInUp 0.3s forwards;
+  }
+
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 .nav-item {

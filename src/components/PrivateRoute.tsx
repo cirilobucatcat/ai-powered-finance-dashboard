@@ -14,7 +14,7 @@ function PrivateRoute({ children }: PrivateRouteProps) {
         <div className='relative flex w-full bg-slate-950'>
             <Profile />
             <Sidebar />
-            <div className='w-full h-screen overflow-y-auto'>
+            <div className='w-full h-screen overflow-y-auto custom-scrollbar'>
                 {children}
             </div>
         </div>

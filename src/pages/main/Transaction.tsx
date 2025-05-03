@@ -1,12 +1,45 @@
+import CustomButton from "@/components/CustomButton";
+import { FormInput } from "@/components/FormInput";
+import Modal from "@/components/Modal";
 import Pagination from "@/components/Pagination";
 import SEO from "@/components/SEO";
+import { useLoading } from "@/hooks/loading";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { CiSearch } from "react-icons/ci";
+import * as z from "zod";
+
+const loginSchema = z.object({
+  email: z
+    .string({ message: "Email is required" })
+    .email("Please enter a valid email"),
+  password: z
+    .string({ message: "Password is required" })
+    .min(1, "Password must contain at least 1 character(s)"),
+});
+
+type LoginSchema = z.infer<typeof loginSchema>;
 
 export default function Transaction() {
+  const [isOpen, setIsOpen] = useState(false);
+  const { startLoading, stopLoading } = useLoading();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
+    startLoading();
+  };
+
   return (
     <>
       <SEO title="Transactions" />
-      <div className="p-6 flex flex-col bg-slate-900 mx-6 mt-36 rounded-lg">
+      <div className="p-6 flex flex-col bg-slate-900 mx-6 mt-36 sm:mt-24 md:mt-24 rounded-lg">
         <h1 className="text-electric-lime text-2xl uppercase font-bold mb-4">
           Transctions
         </h1>
@@ -25,7 +58,10 @@ export default function Transaction() {
           </div>
           <div>
             <p className="text-electric-lime mb-2 text-sm">
-              Filter by <span className="font-semibold tracking-tight">Transaction Type</span>
+              Filter by{" "}
+              <span className="font-semibold tracking-tight">
+                Transaction Type
+              </span>
             </p>
             <select className="rounded-sm border-2 border-electric-lime w-full outline-electric-lime text-slate-50 py-2 px-4 caret-red-500 text-sm">
               <option value="income" className="text-slate-950">
@@ -36,7 +72,12 @@ export default function Transaction() {
               </option>
             </select>
           </div>
-          <button className="bg-electric-lime px-4 py-2 rounded-sm font-bold uppercase text-sm hover:bg-electric-lime/85 cursor-pointer transition-colors delay-100 tracking-wide">Add Transaction</button>
+          <button
+            onClick={() => setIsOpen(true)}
+            className="bg-electric-lime px-4 py-2 rounded-sm font-bold uppercase text-sm hover:bg-electric-lime/85 cursor-pointer transition-colors delay-100 tracking-wide"
+          >
+            Add Transaction
+          </button>
         </div>
         <table className="text-electric-lime my-10 bg-slate-950 rounded-lg">
           <thead>
@@ -96,7 +137,48 @@ export default function Transaction() {
             </tr>
           </tbody>
         </table>
-        <Pagination className="ml-auto"/>
+        <Pagination className="ml-auto bg-slate-900" />
+        <Modal
+          title="Create Transaction"
+          isOpen={isOpen}
+          size="sm"
+          onClose={() => setIsOpen(false)}
+        >
+          <form className="space-y-2" onSubmit={handleSubmit(onSubmit)}>
+            <FormInput
+              name="email"
+              label="Transaction"
+              type="text"
+              register={register}
+              error={errors.email}
+              className="w-full"
+              placeholder="Enter transaction description"
+              containerClass="w-full"
+            />
+            <FormInput
+              name="email"
+              label="Type"
+              type="number"
+              register={register}
+              error={errors.email}
+              className="w-full"
+              containerClass="w-full"
+            />
+            <FormInput
+              name="email"
+              label="Amount"
+              type="number"
+              register={register}
+              error={errors.email}
+              className="w-full"
+              placeholder="Enter amout"
+              containerClass="w-full"
+            />
+            <CustomButton type="submit" className="w-full mt-4">
+              Submit
+            </CustomButton>
+          </form>
+        </Modal>
       </div>
     </>
   );
