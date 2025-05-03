@@ -13,8 +13,7 @@ export default function Sidebar() {
 
     return (
         <div className={`${show ? 'hidden sm:flex w-[300px]' : 'w-[100px]'} bg-slate-800 h-screen flex flex-col`}>
-            {show && <p className="text-electric-lime uppercase font-bold text-2xl font-sour-gummy tracking-wider text-center mt-12 mb-8">Finebird</p>}
-
+            {show && <p className="text-electric-lime uppercase font-bold text-2xl font-tomorrow tracking-tight text-center mt-12 mb-8">Finebird</p>}
             <ul className="ml-4">
                 <NavLink
                     to='/dashboard'

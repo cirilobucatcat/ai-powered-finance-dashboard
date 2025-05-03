@@ -70,7 +70,7 @@ export default function Dashboard() {
       <SEO title="Dashboard" />
       <div className="p-6 w-full flex flex-col">
         <div className="col-span-full">
-          <h2 className="text-electric-lime text-3xl sm:text-xl uppercase font-bold font-sour-gummy">Welcome Back, {user?.displayName}!</h2>
+          <h2 className="text-electric-lime text-3xl sm:text-xl uppercase font-bold font-tomorrow">Welcome Back, {user?.displayName}!</h2>
           <p className="text-slate-300 text-base sm:text-sm font-medium">Good to see you again</p>
         </div>
         <p className="text-slate-50 text-base font-bold tracking-wide mt-4 mb-3">Overview</p>

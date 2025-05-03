@@ -1,3 +1,4 @@
+import Pagination from "@/components/Pagination";
 import SEO from "@/components/SEO";
 import { CiSearch } from "react-icons/ci";
 
@@ -95,6 +96,7 @@ export default function Transaction() {
             </tr>
           </tbody>
         </table>
+        <Pagination className="ml-auto"/>
       </div>
     </>
   );

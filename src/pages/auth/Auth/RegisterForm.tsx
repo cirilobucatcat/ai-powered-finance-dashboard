@@ -53,7 +53,7 @@ export default function RegisterForm() {
     >
         <div className="text-center sm:text-start w-full">
             <h1 className="text-md sm:text-xl uppercase font-bold text-electric-lime">
-                Register to <span className="font-sour-gummy uppercase tracking-widest">Finebird</span>
+                Register to <span className="font-tomorrow uppercase tracking-widest">Finebird</span>
             </h1>
             <p className="text-xs sm:text-sm text-slate-300">Start your financial journey with us</p>
         </div>
