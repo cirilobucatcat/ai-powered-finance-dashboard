@@ -4,6 +4,9 @@ import RegisterAndLogin from './pages/auth/RegisterAndLogin';
 import PrivateRoute from './components/PrivateRoute';
 import Transaction from './pages/main/Transaction';
 import Dashboard from './pages/main/Dashboard';
+import { Toaster } from 'react-hot-toast';
+import { customToasterProps } from './utils/constants';
+
 export default function App() {
 
   return (<AuthProvider>
@@ -28,5 +31,6 @@ export default function App() {
         />
       </Routes>
     </BrowserRouter>
+    <Toaster {...customToasterProps} />
   </AuthProvider>);
 }
