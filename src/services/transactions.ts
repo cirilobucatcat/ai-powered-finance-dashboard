@@ -1,6 +1,6 @@
 import { auth, db } from "@/firebase";
 import { FirebaseError } from "firebase/app";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, endAt, getDocs, limit, query, startAt, where } from "firebase/firestore";
 
 const collectionName = 'transactions';
 
@@ -9,23 +9,21 @@ type ResponseType = {
     error: Error | null
 }
 
-export const getAll = async () => {
+export const getAll = async (search: string = '') => {
     const user = auth.currentUser
     if (user) {
         const uid = user.uid;
-
         try {
 
             const collectionRef = collection(db, collectionName);
-            const q = query(collectionRef, where('userId', '==', uid))
-            const querySnapshot = await getDocs(q)
+            const querySnapshot = await getDocs(query(collectionRef, where('userId', '==', uid), limit(5)));
 
-            return querySnapshot.docs.map((doc) => {
-                return {
-                    id: doc.id,
-                    ...doc.data()
-                }
+            return querySnapshot.docs.map(doc => ({ id: doc.id, transaction: doc.data().transaction, amount: doc.data().amount })).filter(item => {
+                const transactionMatch = item.transaction.toLowerCase().includes(search.toLowerCase());
+                const amountMatch = String(item.amount).includes(search);
+                return transactionMatch || amountMatch;
             });
+
         } catch (err) {
             return []
         }

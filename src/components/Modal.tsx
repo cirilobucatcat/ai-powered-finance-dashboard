@@ -36,7 +36,7 @@ const Modal = ({
           ></div>
 
           <div
-            className={`relative bg-slate-950 text-slate-50 rounded-lg shadow-lg p-6 w-full animate-fade-in-up overflow-y-auto max-h-full custom-scrollbar ${sizeVariant}`}
+            className={`relative shadow-electric-lime/20 bg-slate-950 text-slate-50 rounded-lg shadow-lg p-6 w-full animate-fade-in-up overflow-y-auto max-h-full custom-scrollbar ${sizeVariant}`}
           >
             <button
               onClick={onClose}

@@ -8,7 +8,7 @@ import { useLoading } from "@/hooks/loading";
 import { getAll, save } from "@/services/transactions";
 import { transactionFormSchema, TransactionFormType } from "@/validators";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { CiSearch } from "react-icons/ci";
@@ -17,6 +17,8 @@ export default function Transaction() {
   const [isOpen, setIsOpen] = useState(false);
   const { isLoading, startLoading, stopLoading } = useLoading();
   const [data, setData] = useState<any[] | undefined>([]);
+  const [searchTerm, setSearch] = useState('');
+
   const {
     register,
     reset,
@@ -37,8 +39,15 @@ export default function Transaction() {
       .finally(stopLoading)
   };
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    let target = e.target as HTMLInputElement;
+    setSearch(target.value);
+    getAll(searchTerm).then(setData)
+  };
+
   useEffect(() => {
-    getAll().then(setData);
+    getAll().then(setData)
   }, []);
 
   return (
@@ -56,6 +65,7 @@ export default function Transaction() {
               color="#cfff04"
             />
             <input
+              onChange={handleSearch}
               type="text"
               placeholder="Search here"
               className="text-slate-50 text-sm pr-2 pl-8 py-2 placeholder:text-slate-500 border-2 border-electric-lime rounded outline-electric-lime w-xs"
@@ -96,7 +106,7 @@ export default function Transaction() {
             </tr>
           </thead>
           <tbody>
-            {data && data.map((d) => (<tr className="odd:bg-slate-900 odd:hover:bg-slate-800/75 even:bg-slate-950 even:hover:bg-slate-900/75 transition-colors">
+            {data && data.map((d) => (<tr key={d.id} className="odd:bg-slate-900 odd:hover:bg-slate-800/75 even:bg-slate-950 even:hover:bg-slate-900/75 transition-colors">
               <td className="py-3 text-slate-50 text-sm" align="center">
                 {d.transaction}
               </td>
