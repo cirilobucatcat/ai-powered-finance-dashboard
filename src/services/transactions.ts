@@ -1,6 +1,7 @@
 import { auth, db } from "@/firebase";
+import { ITransaction } from "@/types";
 import { FirebaseError } from "firebase/app";
-import { addDoc, collection, endAt, getDocs, limit, query, startAt, where } from "firebase/firestore";
+import { addDoc, collection, endAt, limit, onSnapshot, orderBy, query, startAt, Unsubscribe, where } from "firebase/firestore";
 
 const collectionName = 'transactions';
 
@@ -9,46 +10,60 @@ type ResponseType = {
     error: Error | null
 }
 
-export const getAll = async (search: string = '') => {
+interface ListenOptions {
+    searchTerm?: string;
+}
+
+export const listen = (callback: (transction: ITransaction[]) => void, options: ListenOptions = {}): Unsubscribe => {
     const user = auth.currentUser
-    if (user) {
-        const uid = user.uid;
-        try {
 
-            const collectionRef = collection(db, collectionName);
-            const querySnapshot = await getDocs(query(collectionRef, where('userId', '==', uid), limit(5)));
+    if (!user) return () => { };
 
-            return querySnapshot.docs.map(doc => ({ id: doc.id, transaction: doc.data().transaction, amount: doc.data().amount })).filter(item => {
-                const transactionMatch = item.transaction.toLowerCase().includes(search.toLowerCase());
-                const amountMatch = String(item.amount).includes(search);
-                return transactionMatch || amountMatch;
-            });
+    const q = query(
+        collection(db, collectionName), 
+        where('userId', '==', user.uid),
+        orderBy('createdAt', 'desc'),
+        limit(5)
+    );
 
-        } catch (err) {
-            return []
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+
+        const transactions = snapshot.docs.map(doc => {
+            const data = doc.data() as Omit<ITransaction, 'id'>;
+            return { id: doc.id, ...data };
+        });
+
+        if (options.searchTerm) {
+            const term = options.searchTerm.toLowerCase();
+            callback(transactions.filter(tx =>
+                tx.transaction.toLowerCase().includes(term) ||
+                String(tx.amount).includes(term)
+            ));
+        } else {
+            callback(transactions);
         }
-    }
+    });
 
+    return unsubscribe;
 }
 
 export const save = async (data: any): Promise<ResponseType> => {
+
     const user = auth.currentUser
-    if (user) {
-        const uid = user.uid;
-        try {
+    if (!user) return { data: null, error: { name: 'user-not-found', message: 'User not found. ' } }
 
-            await addDoc(collection(db, collectionName), { userId: uid, ...data, createdAt: new Date() });
-            return { data: null, error: null };
+    try {
 
-        } catch (error: unknown) {
-            if (error instanceof FirebaseError) {
-                console.error("Firebase error:", error.code, error.message);
-            } else {
-                console.error("Unknown error:", error);
-            }
-            return { data: { success: true }, error: null }
+        await addDoc(collection(db, collectionName), { userId: user.uid, ...data, createdAt: new Date() });
+        return { data: null, error: null };
+
+    } catch (error: unknown) {
+        if (error instanceof FirebaseError) {
+            console.error("Firebase error:", error.code, error.message);
+        } else {
+            console.error("Unknown error:", error);
         }
+        return { data: { success: true }, error: null }
     }
 
-    return { data: null, error: { name: 'user-not-found', message: 'User not found. ' } }
 }

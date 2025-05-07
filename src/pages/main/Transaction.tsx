@@ -5,7 +5,9 @@ import Modal from "@/components/Modal";
 import Pagination from "@/components/Pagination";
 import SEO from "@/components/SEO";
 import { useLoading } from "@/hooks/loading";
-import { getAll, save } from "@/services/transactions";
+import { listen, save } from "@/services/transactions";
+import { ITransaction } from "@/types";
+import { formatToCurrency } from "@/utils/helpers";
 import { transactionFormSchema, TransactionFormType } from "@/validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
@@ -16,7 +18,7 @@ import { CiSearch } from "react-icons/ci";
 export default function Transaction() {
   const [isOpen, setIsOpen] = useState(false);
   const { isLoading, startLoading, stopLoading } = useLoading();
-  const [data, setData] = useState<any[] | undefined>([]);
+  const [transactions, setTransactions] = useState<ITransaction[]>([]);
   const [searchTerm, setSearch] = useState('');
 
   const {
@@ -43,12 +45,15 @@ export default function Transaction() {
     e.preventDefault();
     let target = e.target as HTMLInputElement;
     setSearch(target.value);
-    getAll(searchTerm).then(setData)
   };
 
   useEffect(() => {
-    getAll().then(setData)
-  }, []);
+
+    const unsubscribe = listen(setTransactions, { searchTerm: searchTerm });
+
+    return () => unsubscribe();
+
+  }, [searchTerm]);
 
   return (
     <>
@@ -106,15 +111,15 @@ export default function Transaction() {
             </tr>
           </thead>
           <tbody>
-            {data && data.map((d) => (<tr key={d.id} className="odd:bg-slate-900 odd:hover:bg-slate-800/75 even:bg-slate-950 even:hover:bg-slate-900/75 transition-colors">
+            {transactions && transactions.map((transaction) => (<tr key={transaction.id} className="odd:bg-slate-900 odd:hover:bg-slate-800/75 even:bg-slate-950 even:hover:bg-slate-900/75 transition-colors">
               <td className="py-3 text-slate-50 text-sm" align="center">
-                {d.transaction}
+                {transaction.transaction}
               </td>
               <td className="text-slate-50 text-sm" align="right">
-                {d.amount}
+                {formatToCurrency(transaction.amount)}
               </td>
               <td align="center">
-                <Badge type={d.type} />
+                <Badge type={transaction.type} />
               </td>
               <td align="center">
                 <div className="flex items-center justify-center gap-2">
