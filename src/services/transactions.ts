@@ -7,7 +7,7 @@ const collectionName = 'transactions';
 
 type ResponseType = {
     data: any | null,
-    error: Error | null
+    error: FirebaseError | null
 }
 
 interface ListenOptions {
@@ -50,7 +50,7 @@ export const listen = (callback: (transction: ITransaction[]) => void, options: 
 export const save = async (data: any): Promise<ResponseType> => {
 
     const user = auth.currentUser
-    if (!user) return { data: null, error: { name: 'user-not-found', message: 'User not found. ' } }
+    if (!user) return { data: null, error: { name: 'user', code: 'test', message: ''} }
 
     try {
 
@@ -63,7 +63,8 @@ export const save = async (data: any): Promise<ResponseType> => {
         } else {
             console.error("Unknown error:", error);
         }
-        return { data: { success: true }, error: null }
+
+        return { data: { success: true }, error: error as FirebaseError }
     }
 
 }
