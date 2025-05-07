@@ -10,18 +10,18 @@ type CustomButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 const CustomButton = ({
   children,
   className = "",
-  isLoading = true,
+  disabled,
   ...props
 }: CustomButtonProps) => {
 
   
   return (
     <button
-      className={`flex items-center justify-center gap-2 bg-electric-lime hover:bg-electric-lime/75 text-slate-900 transition-colors delay-75 hover:text-slate-800 py-2 rounded-sm uppercase font-bold tracking-wide text-sm cursor-pointer disabled:bg-electric-lime/60 ${className}`}
-      disabled={isLoading}      
+      className={`bg-electric-lime flex items-center justify-center gap-2 hover:bg-electric-lime/75 text-slate-950 transition-colors delay-75 hover:text-slate-800 py-3 rounded-sm uppercase font-bold tracking-wide text-sm cursor-pointer disabled:bg-gray-600 disabled:cursor-not-allowed ${className}`}
+      disabled={disabled}
       {...props}
     >
-      {isLoading && <AiOutlineLoading className="animate-spin" size={24} />}
+      {disabled && <AiOutlineLoading size={18} color="#0f172b " className="animate-spin" />}
       {children}
     </button>
   );
