@@ -1,4 +1,5 @@
 import CustomButton from "@/components/CustomButton";
+import CustomSelect from "@/components/CustomSelect";
 import { FormInput } from "@/components/FormInput";
 import Modal from "@/components/Modal";
 import Pagination from "@/components/Pagination";
@@ -39,6 +40,9 @@ export default function Transaction() {
   return (
     <>
       <SEO title="Transactions" />
+      <div>
+        <CustomSelect onChange={() => '123'} options={[{ label: 'Opton 1', value: 'option1'}]} />
+      </div>
       <div className="p-6 flex flex-col bg-slate-900 mx-6 mt-36 sm:mt-24 md:mt-24 rounded-lg">
         <h1 className="text-electric-lime text-2xl uppercase font-bold mb-4">
           Transctions
