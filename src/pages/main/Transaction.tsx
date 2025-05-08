@@ -21,11 +21,13 @@ export default function Transaction() {
   const { isLoading, startLoading, stopLoading } = useLoading();
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
   const [searchTerm, setSearch] = useState('');
+  const [filter, setFilter] = useState('');
 
   const {
     register,
     reset,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<TransactionFormType>({
     resolver: zodResolver(transactionFormSchema),
@@ -48,20 +50,21 @@ export default function Transaction() {
     setSearch(target.value);
   };
 
+  const handleTransactionTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    let value = e.target.value as 'income' | 'expense'
+    setValue('type', value)
+  }
+
   useEffect(() => {
 
-    const unsubscribe = listen(setTransactions, { searchTerm: searchTerm });
-
+    const unsubscribe = listen(setTransactions, { searchTerm, filter });
     return () => unsubscribe();
 
-  }, [searchTerm]);
+  }, [searchTerm, filter]);
 
   return (
     <>
       <SEO title="Transactions" />
-      <div>
-        <CustomSelect onChange={() => '123'} options={[{ label: 'Opton 1', value: 'option1'}]} />
-      </div>
       <div className="p-6 flex flex-col bg-slate-900 mx-6 mt-36 sm:mt-24 md:mt-24 rounded-lg">
         <h1 className="text-electric-lime text-2xl uppercase font-bold mb-4">
           Transctions
@@ -87,14 +90,27 @@ export default function Transaction() {
                 Transaction Type
               </span>
             </p>
-            <select className="rounded-sm border-2 border-electric-lime w-full outline-electric-lime text-slate-50 py-2 px-4 caret-red-500 text-sm">
-              <option value="income" className="text-slate-950">
-                Income
-              </option>
-              <option value="expense" className="text-slate-950">
-                Expense
-              </option>
-            </select>
+            <CustomSelect 
+              onChange={(e) => {
+                let value = e.target.value
+                setFilter(value)
+              }} 
+              options={
+                [
+                  {
+                    value: '',
+                    label: 'All'
+                  },
+                  {
+                    value: 'income',
+                    label: 'Income'
+                  },
+                  {
+                    value: 'expense',
+                    label: 'Expense'
+                  },
+                ]
+            }/>
           </div>
           <button
             onClick={() => setIsOpen(true)}
@@ -162,9 +178,20 @@ export default function Transaction() {
             <FormInput
               name='type'
               label="Type"
-              type="text"
+              type='select'
               register={register}
               error={errors.type}
+              onSelectChange={handleTransactionTypeChange}
+              selectOptions={[
+                {
+                  label: 'Income',
+                  value: 'income',
+                },
+                {
+                  label: 'Expense',
+                  value: 'expense',
+                }
+              ]}
               className="w-full"
               containerClass="w-full"
             />

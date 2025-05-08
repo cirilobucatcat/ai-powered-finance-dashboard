@@ -1,7 +1,7 @@
 import { auth, db } from "@/firebase";
 import { ITransaction } from "@/types";
 import { FirebaseError } from "firebase/app";
-import { addDoc, collection, endAt, limit, onSnapshot, orderBy, query, startAt, Unsubscribe, where } from "firebase/firestore";
+import { addDoc, collection, onSnapshot, orderBy, query, QueryConstraint, Unsubscribe, where } from "firebase/firestore";
 
 const collectionName = 'transactions';
 
@@ -12,6 +12,7 @@ type ResponseType = {
 
 interface ListenOptions {
     searchTerm?: string;
+    filter?: string
 }
 
 export const listen = (callback: (transction: ITransaction[]) => void, options: ListenOptions = {}): Unsubscribe => {
@@ -19,12 +20,16 @@ export const listen = (callback: (transction: ITransaction[]) => void, options: 
 
     if (!user) return () => { };
 
-    const q = query(
-        collection(db, collectionName), 
+    let queryConstraints: QueryConstraint[] = [
         where('userId', '==', user.uid),
         orderBy('createdAt', 'desc'),
-        limit(5)
-    );
+    ];
+
+    if(options.filter) {
+        queryConstraints.push(where('type', '==', options.filter))
+    }
+    
+    let q = query(collection(db, collectionName), ...queryConstraints)
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
 

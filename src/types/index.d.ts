@@ -1,15 +1,32 @@
+import { ChangeEventHandler, HTMLInputTypeAttribute, SelectHTMLAttributes } from "react";
 import { FieldError, FieldValues, Path, UseFormRegister } from "react-hook-form";
 
-export interface FormInputProps<T extends FieldValues> {
+type OptionProps = {
+  value: string,
+  label: string,
+}
+
+export type FormInputProps<T extends FieldValues> = {
   prependIcon?: React.ReactNode
   name: Path<T>;
   label?: string;
-  type?: string;
+  type?: HTMLInputTypeAttribute | 'select';
   register: UseFormRegister<T>;
   error?: FieldError;
   placeholder?: string;
   className?: string;
   containerClass?: string;
+  onSelectChange?: CustomSelectProps['onChange']
+  selectOptions?: OptionProps[]
+}
+
+export type CustomSelectProps = SelectHTMLAttributes<HTMLSelectElement> & {
+  options: OptionProps[]
+  onChange?: ChangeEventHandler<HTMLSelectElement>
+  placeholderValue?: {
+    label: string,
+    value: string
+  }
 }
 
 export interface ITransaction {

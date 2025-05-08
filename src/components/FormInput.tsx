@@ -1,18 +1,22 @@
 import { FieldValues } from "react-hook-form";
 import ErrorMessage from "./ErrorMessage";
 import { FormInputProps } from "@/types";
+import CustomSelect from "./CustomSelect";
 
 export function FormInput<T extends FieldValues>({
   name,
   label,
-  type = "text",
+  type = 'select',
   register,
   error,
   placeholder,
   className = "",
   containerClass = '',
-  prependIcon
+  prependIcon,
+  onSelectChange,
+  selectOptions
 }: FormInputProps<T>) {
+
   return (
     <div className={`relative ${containerClass}`}>
       {label && (
@@ -20,14 +24,23 @@ export function FormInput<T extends FieldValues>({
           {label}
         </label>
       )}
-      {prependIcon && <div className="absolute top-[36px] left-2 bottom-[12px]">{prependIcon}</div> }
-      <input
-        id={name}
-        type={type}
-        placeholder={placeholder}
-        className={`w-full border-2 rounded-sm bg-slate-800 border-electric-lime outline-electric-lime text-slate-50 p-3 text-sm ${className} ${prependIcon ? 'pl-8' : 'px-3'}`}
-        {...register(name)}
-      />
+      {prependIcon && <div className="absolute top-[36px] left-2 bottom-[12px]">{prependIcon}</div>}
+      {
+        type === 'select' ?
+          <CustomSelect
+            onChange={onSelectChange}
+            placeholderValue={{ label: '-- select an item --', value: ''}}
+            options={selectOptions ?? []}
+            id={name}
+          /> :
+          <input
+            id={name}
+            type={type}
+            placeholder={placeholder}
+            className={`w-full border-2 rounded-sm bg-slate-800 border-electric-lime outline-electric-lime text-slate-50 p-3 text-sm ${className} ${prependIcon ? 'pl-8' : 'px-3'}`}
+            {...register(name)}
+          />
+      }
       {error && <ErrorMessage message={error.message} />}
     </div>
   );
