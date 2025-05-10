@@ -1,24 +1,24 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm } from "react-hook-form";
-import * as z from "zod";
-import { MdOutlineAlternateEmail } from "react-icons/md";
-import { IoKeyOutline } from "react-icons/io5";
-import { AiOutlineLoading } from "react-icons/ai";
-import { useLoading } from "@/hooks/loading";
-import { FormInput } from "@/components/FormInput";
-import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { useAuth } from "@/context/AuthContext";
-import { auth } from "@/firebase";
-import { FirebaseError } from "firebase/app";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { MdOutlineAlternateEmail } from 'react-icons/md';
+import { IoKeyOutline } from 'react-icons/io5';
+import { AiOutlineLoading } from 'react-icons/ai';
+import { useLoading } from '@/hooks/loading';
+import { FormInput } from '@/components/FormInput';
+import { useNavigate } from 'react-router-dom';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useAuth } from '@/context/AuthContext';
+import { auth } from '@/firebase';
+import { FirebaseError } from 'firebase/app';
 
 const loginSchema = z.object({
     email: z
-        .string({ message: "Email is required" })
-        .email("Please enter a valid email"),
+        .string({ message: 'Email is required' })
+        .email('Please enter a valid email'),
     password: z
-        .string({ message: "Password is required" })
-        .min(1, "Password must contain at least 1 character(s)"),
+        .string({ message: 'Password is required' })
+        .min(1, 'Password must contain at least 1 character(s)'),
 });
 
 type LoginSchema = z.infer<typeof loginSchema>;
@@ -39,7 +39,7 @@ export default function LoginForm() {
 
     const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
         startLoading();
-        let { email, password } = data;
+        const { email, password } = data;
         await signInWithEmailAndPassword(auth, email, password)
             .then(user => {
                 login(user.user)
@@ -89,7 +89,7 @@ export default function LoginForm() {
             disabled={isLoading}
             className="bg-electric-lime flex justify-center items-center text-slate-900 w-full text-sm p-3 rounded disabled:opacity-75 cursor-pointer disabled:cursor-not-allowed"
         >
-            {isLoading ? <AiOutlineLoading className="animate-spin" size={20}/> : "Login"}
+            {isLoading ? <AiOutlineLoading className="animate-spin" size={20}/> : 'Login'}
         </button>
     </form>)
 }

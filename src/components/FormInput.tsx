@@ -1,7 +1,7 @@
-import { FieldValues } from "react-hook-form";
-import ErrorMessage from "./ErrorMessage";
-import { FormInputProps } from "@/types";
-import CustomSelect from "./CustomSelect";
+import { FieldValues } from 'react-hook-form';
+import ErrorMessage from './ErrorMessage';
+import { FormInputProps } from '@/types';
+import CustomSelect from './CustomSelect';
 
 export function FormInput<T extends FieldValues>({
   name,
@@ -10,7 +10,7 @@ export function FormInput<T extends FieldValues>({
   register,
   error,
   placeholder,
-  className = "",
+  className = '',
   containerClass = '',
   prependIcon,
   onSelectChange,

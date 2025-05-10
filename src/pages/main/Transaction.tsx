@@ -1,65 +1,60 @@
-import Badge from "@/components/Badge";
-import CustomButton from "@/components/CustomButton";
-import CustomSelect from "@/components/CustomSelect";
-import { FormInput } from "@/components/FormInput";
-import Modal from "@/components/Modal";
-import Pagination from "@/components/Pagination";
-import SEO from "@/components/SEO";
-import { useLoading } from "@/hooks/loading";
-import { listen, save } from "@/services/transactions";
-import { ITransaction } from "@/types";
-import { formatToCurrency } from "@/utils/helpers";
-import { transactionFormSchema, TransactionFormType } from "@/validators";
-import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import { CiSearch } from "react-icons/ci";
+import Badge from '@/components/Badge';
+import CustomSelect from '@/components/CustomSelect';
+import Modal from '@/components/Modal';
+import Pagination from '@/components/Pagination';
+import SEO from '@/components/SEO';
+import CreateForm from '@/components/transactions/CreateForm';
+import DeleteForm from '@/components/transactions/DeleteForm';
+import UpdateForm from '@/components/transactions/UpdateForm';
+import { listen } from '@/services/transactions';
+import { ITransaction, ModalProps } from '@/types';
+import { modals } from '@/utils/constants';
+import { formatToCurrency } from '@/utils/helpers';
+import React, { useEffect, useState } from 'react';
+import { CiSearch } from 'react-icons/ci';
 
 export default function Transaction() {
   const [isOpen, setIsOpen] = useState(false);
-  const { isLoading, startLoading, stopLoading } = useLoading();
-  const [transactions, setTransactions] = useState<ITransaction[]>([]);
   const [searchTerm, setSearch] = useState('');
   const [filter, setFilter] = useState('');
-
-  const {
-    register,
-    reset,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<TransactionFormType>({
-    resolver: zodResolver(transactionFormSchema),
-  });
-
-  const onSubmit: SubmitHandler<TransactionFormType> = async (data) => {
-    startLoading();
-    save(data)
-      .then(() => {
-        setIsOpen(false);
-        reset();
-        toast.success('Transaction saved')
-      })
-      .finally(stopLoading)
-  };
+  const [modal, setModal] = useState<ModalProps | undefined>();
+  const [transactions, setTransactions] = useState<ITransaction[]>([]);
+  const [selectedTransaction, setTransaction] = useState<
+    ITransaction | undefined
+  >();
+  const transctionModals: ModalProps[] = (modals.transactions ??
+    []) as ModalProps[];
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    let target = e.target as HTMLInputElement;
+    const target = e.target as HTMLInputElement;
     setSearch(target.value);
   };
 
-  const handleTransactionTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    let value = e.target.value as 'income' | 'expense'
-    setValue('type', value)
-  }
+  const handleOnCloseModal = () => {
+    setIsOpen(false);
+  };
+
+  const openModal = (modalId: string) => {
+    setModal(transctionModals.find((modal) => modal.id === modalId));
+    setIsOpen(true);
+  };
+
+  const handleAction = (
+    transaction: ITransaction,
+    action: 'update' | 'delete'
+  ) => {
+    setTransaction(transaction);
+    openModal(
+      action === 'update'
+        ? 'update-transaction-modal'
+        : 'delete-transaction-modal'
+    );
+  };
 
   useEffect(() => {
-
     const unsubscribe = listen(setTransactions, { searchTerm, filter });
     return () => unsubscribe();
-
   }, [searchTerm, filter]);
 
   return (
@@ -85,35 +80,34 @@ export default function Transaction() {
           </div>
           <div>
             <p className="text-electric-lime mb-2 text-sm">
-              Filter by{" "}
+              Filter by{' '}
               <span className="font-semibold tracking-tight">
                 Transaction Type
               </span>
             </p>
-            <CustomSelect 
+            <CustomSelect
               onChange={(e) => {
-                let value = e.target.value
-                setFilter(value)
-              }} 
-              options={
-                [
-                  {
-                    value: '',
-                    label: 'All'
-                  },
-                  {
-                    value: 'income',
-                    label: 'Income'
-                  },
-                  {
-                    value: 'expense',
-                    label: 'Expense'
-                  },
-                ]
-            }/>
+                const value = e.target.value;
+                setFilter(value);
+              }}
+              options={[
+                {
+                  value: '',
+                  label: 'All',
+                },
+                {
+                  value: 'income',
+                  label: 'Income',
+                },
+                {
+                  value: 'expense',
+                  label: 'Expense',
+                },
+              ]}
+            />
           </div>
           <button
-            onClick={() => setIsOpen(true)}
+            onClick={() => openModal('create-transaction-modal')}
             className="bg-electric-lime px-4 py-3 rounded-sm font-bold uppercase text-sm hover:bg-electric-lime/85 cursor-pointer transition-colors delay-100 tracking-wide"
           >
             Add Transaction
@@ -131,89 +125,58 @@ export default function Transaction() {
             </tr>
           </thead>
           <tbody>
-            {transactions && transactions.map((transaction) => (<tr key={transaction.id} className="odd:bg-slate-900 odd:hover:bg-slate-800/75 even:bg-slate-950 even:hover:bg-slate-900/75 transition-colors">
-              <td className="py-3 text-slate-50 text-sm" align="center">
-                {transaction.transaction}
-              </td>
-              <td className="text-slate-50 text-sm" align="right">
-                {formatToCurrency(transaction.amount)}
-              </td>
-              <td align="center">
-                <Badge type={transaction.type} />
-              </td>
-              <td align="center">
-                <div className="flex items-center justify-center gap-2">
-                  <button className="w-16 rounded-sm text-slate-50 text-sm py-1 shadow bg-linear-to-r from-sky-500 to-blue-500 hover:opacity-80 cursor-pointer">
-                    Edit
-                  </button>
-                  <button className="w-16 rounded-sm text-slate-50 text-sm py-1 shadow bg-linear-to-r from-rose-500 to-red-500 hover:opacity-80 cursor-pointer">
-                    Delete
-                  </button>
-                </div>
-              </td>
-            </tr>))}
+            {transactions &&
+              transactions.map((transaction) => (
+                <tr
+                  key={transaction.id}
+                  className="odd:bg-slate-900 odd:hover:bg-slate-800/75 even:bg-slate-950 even:hover:bg-slate-900/75 transition-colors"
+                >
+                  <td className="py-3 text-slate-50 text-sm" align="center">
+                    {transaction.transaction}
+                  </td>
+                  <td className="text-slate-50 text-sm" align="right">
+                    {formatToCurrency(transaction.amount)}
+                  </td>
+                  <td align="center">
+                    <Badge type={transaction.type} />
+                  </td>
+                  <td align="center">
+                    <div className="flex items-center justify-center gap-2">
+                      <button
+                        onClick={() => handleAction(transaction, 'update')}
+                        className="w-16 rounded-sm text-slate-50 text-sm py-1 shadow bg-linear-to-r from-sky-500 to-blue-500 hover:opacity-80 cursor-pointer"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleAction(transaction, 'delete')}
+                        className="w-16 rounded-sm text-slate-50 text-sm py-1 shadow bg-linear-to-r from-rose-500 to-red-500 hover:opacity-80 cursor-pointer"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
         <Pagination className="ml-auto bg-slate-900" />
-        <Modal
-          title="Create Transaction"
-          isOpen={isOpen}
-          size="sm"
-          onClose={() => {
-            setIsOpen(false);
-            reset()
-          }}
-        >
-          <form className="space-y-2" onSubmit={handleSubmit(onSubmit)}>
-            <FormInput
-              name='transaction'
-              label="Transaction"
-              type="text"
-              register={register}
-              error={errors.transaction}
-              className="w-full"
-              placeholder="Enter transaction description"
-              containerClass="w-full"
-            />
-            <FormInput
-              name='type'
-              label="Type"
-              type='select'
-              register={register}
-              error={errors.type}
-              onSelectChange={handleTransactionTypeChange}
-              selectOptions={[
-                {
-                  label: 'Income',
-                  value: 'income',
-                },
-                {
-                  label: 'Expense',
-                  value: 'expense',
-                }
-              ]}
-              className="w-full"
-              containerClass="w-full"
-            />
-            <FormInput
-              name='amount'
-              label="Amount"
-              type="number"
-              register={register}
-              error={errors.amount}
-              className="w-full"
-              placeholder="Enter amout"
-              containerClass="w-full"
-            />
-            <CustomButton
-              disabled={isLoading}
-              type="submit"
-              className="w-full mt-4"
-            >
-              Submit
-            </CustomButton>
-          </form>
-        </Modal>
+        {modal && (
+          <Modal
+            title={modal?.title ?? 'Modal Title'}
+            isOpen={isOpen}
+            size="sm"
+            onClose={handleOnCloseModal}
+          >
+            {modal?.id === 'create-transaction-modal' && <CreateForm />}
+            {modal?.id === 'update-transaction-modal' && (
+              <UpdateForm transaction={selectedTransaction} />
+            )}
+            {modal?.id === 'delete-transaction-modal' && (
+              <DeleteForm transactionId={selectedTransaction?.id} />
+            )}
+          </Modal>
+        )}
       </div>
     </>
   );

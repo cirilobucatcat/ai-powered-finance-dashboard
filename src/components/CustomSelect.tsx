@@ -1,4 +1,4 @@
-import { CustomSelectProps } from "@/types";
+import { CustomSelectProps } from '@/types';
 
 const CustomSelect = ({ onChange, options, placeholderValue, ...props }: CustomSelectProps) => {
   return (

@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
 type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
   title?: string;
   children: React.ReactNode;
 };
@@ -11,18 +11,18 @@ type ModalProps = {
 const Modal = ({
   isOpen,
   onClose,
-  size = "md",
+  size = 'md',
   children,
   title,
 }: ModalProps) => {
   const sizeVariants = {
-    xs: "max-w-xs",
-    sm: "max-w-sm sm:max-h-2xl md:max-h-2xl xl:max-h-xl",
-    md: "max-w-md md:max-h-3/4 lg:max-h-[200px]",
-    lg: "max-w-lg max-h-3/4",
-    xl: "max-w-xl max-h-3/4",
-    "2xl": "max-w-2xl max-h-3/4",
-  } satisfies Record<NonNullable<ModalProps["size"]>, string>;
+    xs: 'max-w-xs',
+    sm: 'max-w-sm sm:max-h-2xl md:max-h-2xl xl:max-h-xl',
+    md: 'max-w-md md:max-h-3/4 lg:max-h-[200px]',
+    lg: 'max-w-lg max-h-3/4',
+    xl: 'max-w-xl max-h-3/4',
+    '2xl': 'max-w-2xl max-h-3/4',
+  } satisfies Record<NonNullable<ModalProps['size']>, string>;
 
   const sizeVariant = sizeVariants[size];
 
@@ -36,7 +36,7 @@ const Modal = ({
           ></div>
 
           <div
-            className={`relative shadow-electric-lime/20 bg-slate-950 text-slate-50 rounded-lg shadow-lg p-6 w-full animate-fade-in-up overflow-y-auto max-h-full custom-scrollbar ${sizeVariant}`}
+            className={`relative overflow-x-hidden shadow-electric-lime/20 bg-slate-950 text-slate-50 rounded-lg shadow-lg p-6 w-full animate-fade-in-up overflow-y-auto max-h-full custom-scrollbar ${sizeVariant}`}
           >
             <button
               onClick={onClose}

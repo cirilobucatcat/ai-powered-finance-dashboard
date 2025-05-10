@@ -1,11 +1,11 @@
 
-import AuthHero from "./Auth/Hero";
-import { useEffect, useState } from "react";
-import LoginForm from "./Auth/LoginForm";
-import RegisterForm from "./Auth/RegisterForm";
-import { useAuth } from "@/context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import SEO from "@/components/SEO";
+import AuthHero from './Auth/Hero';
+import { useEffect, useState } from 'react';
+import LoginForm from './Auth/LoginForm';
+import RegisterForm from './Auth/RegisterForm';
+import { useAuth } from '@/context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import SEO from '@/components/SEO';
 
 export default function RegisterAndLogin() {
   const [tab, setTab] = useState<'login' | 'register'>('login');

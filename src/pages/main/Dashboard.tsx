@@ -1,11 +1,11 @@
-import DashboardCard from "@/components/DashboardCard";
-import SEO from "@/components/SEO";
-import { useAuth } from "@/context/AuthContext";
+import DashboardCard from '@/components/DashboardCard';
+import SEO from '@/components/SEO';
+import { useAuth } from '@/context/AuthContext';
 import money from '@/assets/images/money.png';
 import wallet from '@/assets/images/wallet.png';
 import moneyBag from '@/assets/images/money-bag.png';
-import CChart from "@/components/CChart";
-import { ChartData } from "chart.js";
+import CChart from '@/components/CChart';
+import { ChartData } from 'chart.js';
 
 export default function Dashboard() {
   const { user } = useAuth();

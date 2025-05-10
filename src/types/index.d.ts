@@ -1,13 +1,22 @@
-import { ChangeEventHandler, HTMLInputTypeAttribute, SelectHTMLAttributes } from "react";
-import { FieldError, FieldValues, Path, UseFormRegister } from "react-hook-form";
+import {
+  ChangeEventHandler,
+  HTMLInputTypeAttribute,
+  SelectHTMLAttributes,
+} from 'react';
+import {
+  FieldError,
+  FieldValues,
+  Path,
+  UseFormRegister,
+} from 'react-hook-form';
 
 type OptionProps = {
-  value: string,
-  label: string,
-}
+  value: string;
+  label: string;
+};
 
 export type FormInputProps<T extends FieldValues> = {
-  prependIcon?: React.ReactNode
+  prependIcon?: React.ReactNode;
   name: Path<T>;
   label?: string;
   type?: HTMLInputTypeAttribute | 'select';
@@ -16,22 +25,27 @@ export type FormInputProps<T extends FieldValues> = {
   placeholder?: string;
   className?: string;
   containerClass?: string;
-  onSelectChange?: CustomSelectProps['onChange']
-  selectOptions?: OptionProps[]
-}
+  onSelectChange?: CustomSelectProps['onChange'];
+  selectOptions?: OptionProps[];
+};
 
 export type CustomSelectProps = SelectHTMLAttributes<HTMLSelectElement> & {
-  options: OptionProps[]
-  onChange?: ChangeEventHandler<HTMLSelectElement>
+  options: OptionProps[];
+  onChange?: ChangeEventHandler<HTMLSelectElement>;
   placeholderValue?: {
-    label: string,
-    value: string
-  }
-}
+    label: string;
+    value: string;
+  };
+};
 
 export interface ITransaction {
   id: string;
-  transaction: string,
-  type: 'income' | 'expense',
-  amount: number
+  transaction: string;
+  type: 'income' | 'expense';
+  amount: number;
 }
+
+export type ModalProps = {
+  title: string;
+  id: string;
+};

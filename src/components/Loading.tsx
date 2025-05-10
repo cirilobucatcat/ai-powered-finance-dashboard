@@ -1,4 +1,4 @@
-import { AiOutlineLoading } from "react-icons/ai";
+import { AiOutlineLoading } from 'react-icons/ai';
 
 export default function Loading() {
   return (

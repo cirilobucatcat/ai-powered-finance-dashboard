@@ -1,25 +1,25 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm } from "react-hook-form";
-import * as z from "zod";
-import { MdOutlineAlternateEmail } from "react-icons/md";
-import { IoKeyOutline } from "react-icons/io5";
-import { FaRegUser } from "react-icons/fa";
-import { AiOutlineLoading } from "react-icons/ai";
-import { useLoading } from "@/hooks/loading";
-import { FormInput } from "@/components/FormInput";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "@/firebase";
-import { useNavigate } from "react-router-dom";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { MdOutlineAlternateEmail } from 'react-icons/md';
+import { IoKeyOutline } from 'react-icons/io5';
+import { FaRegUser } from 'react-icons/fa';
+import { AiOutlineLoading } from 'react-icons/ai';
+import { useLoading } from '@/hooks/loading';
+import { FormInput } from '@/components/FormInput';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { auth } from '@/firebase';
+import { useNavigate } from 'react-router-dom';
 
 const registerSchema = z.object({
-    full_name: z.string({ message: "Full Name is required" })
-        .min(1, "Password must contain at least 1 character(s)"),
+    full_name: z.string({ message: 'Full Name is required' })
+        .min(1, 'Password must contain at least 1 character(s)'),
     email: z
-        .string({ message: "Email is required" })
-        .email("Please enter a valid email"),
+        .string({ message: 'Email is required' })
+        .email('Please enter a valid email'),
     password: z
-        .string({ message: "Password is required" })
-        .min(1, "Password must contain at least 1 character(s)"),
+        .string({ message: 'Password is required' })
+        .min(1, 'Password must contain at least 1 character(s)'),
 });
 
 type RegisterSchema = z.infer<typeof registerSchema>;
@@ -38,7 +38,7 @@ export default function RegisterForm() {
 
     const onSubmit: SubmitHandler<RegisterSchema> = async (data) => {
 
-        let { full_name, email, password } = data;
+        const { full_name, email, password } = data;
         const { user } = await createUserWithEmailAndPassword(auth, email, password);
         
         startLoading();
@@ -98,7 +98,7 @@ export default function RegisterForm() {
             disabled={isLoading}
             className="bg-electric-lime flex justify-center items-center text-slate-900 w-full text-sm py-3 rounded disabled:opacity-75 cursor-pointer disabled:cursor-not-allowed"
         >
-            {isLoading ? <AiOutlineLoading className="animate-spin" size={20}/> : "Register"}
+            {isLoading ? <AiOutlineLoading className="animate-spin" size={20}/> : 'Register'}
         </button>
     </form>)
 }

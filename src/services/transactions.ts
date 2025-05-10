@@ -1,7 +1,7 @@
-import { auth, db } from "@/firebase";
-import { ITransaction } from "@/types";
-import { FirebaseError } from "firebase/app";
-import { addDoc, collection, onSnapshot, orderBy, query, QueryConstraint, Unsubscribe, where } from "firebase/firestore";
+import { auth, db } from '@/firebase';
+import { ITransaction } from '@/types';
+import { FirebaseError } from 'firebase/app';
+import { addDoc, collection, onSnapshot, orderBy, query, QueryConstraint, Unsubscribe, where } from 'firebase/firestore';
 
 const collectionName = 'transactions';
 
@@ -20,7 +20,7 @@ export const listen = (callback: (transction: ITransaction[]) => void, options: 
 
     if (!user) return () => { };
 
-    let queryConstraints: QueryConstraint[] = [
+    const queryConstraints: QueryConstraint[] = [
         where('userId', '==', user.uid),
         orderBy('createdAt', 'desc'),
     ];
@@ -29,7 +29,7 @@ export const listen = (callback: (transction: ITransaction[]) => void, options: 
         queryConstraints.push(where('type', '==', options.filter))
     }
     
-    let q = query(collection(db, collectionName), ...queryConstraints)
+    const q = query(collection(db, collectionName), ...queryConstraints)
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
 
@@ -64,9 +64,9 @@ export const save = async (data: any): Promise<ResponseType> => {
 
     } catch (error: unknown) {
         if (error instanceof FirebaseError) {
-            console.error("Firebase error:", error.code, error.message);
+            console.error('Firebase error:', error.code, error.message);
         } else {
-            console.error("Unknown error:", error);
+            console.error('Unknown error:', error);
         }
 
         return { data: { success: true }, error: error as FirebaseError }

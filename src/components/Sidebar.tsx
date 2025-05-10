@@ -1,7 +1,7 @@
-import { useState } from "react"
-import { MdOutlineDashboard } from "react-icons/md";
-import { NavLink } from "react-router-dom";
-import { FaMoneyBillTransfer } from "react-icons/fa6";
+import { useState } from 'react'
+import { MdOutlineDashboard } from 'react-icons/md';
+import { NavLink } from 'react-router-dom';
+import { FaMoneyBillTransfer } from 'react-icons/fa6';
 
 export default function Sidebar() {
     const [show, setShow] = useState(true);
