@@ -43,9 +43,13 @@ export interface ITransaction {
   transaction: string;
   type: 'income' | 'expense';
   amount: number;
+  userId: string;
 }
+
+export type ModalAction = 'create' | 'update' | 'delete';
 
 export type ModalProps = {
   title: string;
   id: string;
+  action: ModalAction
 };

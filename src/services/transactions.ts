@@ -1,7 +1,7 @@
 import { auth, db } from '@/firebase';
 import { ITransaction } from '@/types';
 import { FirebaseError } from 'firebase/app';
-import { addDoc, collection, onSnapshot, orderBy, query, QueryConstraint, Unsubscribe, where } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, QueryConstraint, serverTimestamp, Unsubscribe, updateDoc, where } from 'firebase/firestore';
 
 const collectionName = 'transactions';
 
@@ -59,10 +59,66 @@ export const save = async (data: any): Promise<ResponseType> => {
 
     try {
 
-        await addDoc(collection(db, collectionName), { userId: user.uid, ...data, createdAt: new Date() });
+        await addDoc(collection(db, collectionName), { 
+            userId: user.uid, 
+            ...data, 
+            createdAt: serverTimestamp(),
+            updatedAt: null
+        });
+
         return { data: null, error: null };
 
     } catch (error: unknown) {
+        if (error instanceof FirebaseError) {
+            console.error('Firebase error:', error.code, error.message);
+        } else {
+            console.error('Unknown error:', error);
+        }
+
+        return { data: { success: true }, error: error as FirebaseError }
+    }
+
+}
+
+export const update = async (transactionId: string, data: any) => {
+
+    const user = auth.currentUser
+    if (!user) return { data: null, error: { name: 'user', code: 'test', message: ''} }
+
+    try {
+
+        await updateDoc(doc(db, collectionName, transactionId), { 
+            ...data,
+            userId: user.uid, 
+            updatedAt: serverTimestamp()
+        });
+
+        return { data: null, error: null };
+
+    } catch (error: unknown) {
+
+        if (error instanceof FirebaseError) {
+            console.error('Firebase error:', error.code, error.message);
+        } else {
+            console.error('Unknown error:', error);
+        }
+
+        return { data: { success: true }, error: error as FirebaseError }
+    }
+}
+
+export const deleteTransaction = async (transactionId: string) => {
+
+    const user = auth.currentUser
+    if (!user) return { data: null, error: { name: 'user', code: 'test', message: ''} }
+
+    try {
+
+        await deleteDoc(doc(db, collectionName, transactionId));
+        return { data: null, error: null };
+
+    } catch (error: unknown) {
+
         if (error instanceof FirebaseError) {
             console.error('Firebase error:', error.code, error.message);
         } else {

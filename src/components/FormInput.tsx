@@ -13,7 +13,6 @@ export function FormInput<T extends FieldValues>({
   className = '',
   containerClass = '',
   prependIcon,
-  onSelectChange,
   selectOptions
 }: FormInputProps<T>) {
 
@@ -28,10 +27,10 @@ export function FormInput<T extends FieldValues>({
       {
         type === 'select' ?
           <CustomSelect
-            onChange={onSelectChange}
+            id={name}
             placeholderValue={{ label: '-- select an item --', value: ''}}
             options={selectOptions ?? []}
-            id={name}
+            {...register(name)}
           /> :
           <input
             id={name}

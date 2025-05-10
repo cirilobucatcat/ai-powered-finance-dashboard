@@ -3,9 +3,8 @@ import CustomSelect from '@/components/CustomSelect';
 import Modal from '@/components/Modal';
 import Pagination from '@/components/Pagination';
 import SEO from '@/components/SEO';
-import CreateForm from '@/components/transactions/CreateForm';
+import CreateOrUpdateForm from '@/components/transactions/CreateOrUpdateForm';
 import DeleteForm from '@/components/transactions/DeleteForm';
-import UpdateForm from '@/components/transactions/UpdateForm';
 import { listen } from '@/services/transactions';
 import { ITransaction, ModalProps } from '@/types';
 import { modals } from '@/utils/constants';
@@ -19,11 +18,9 @@ export default function Transaction() {
   const [filter, setFilter] = useState('');
   const [modal, setModal] = useState<ModalProps | undefined>();
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
-  const [selectedTransaction, setTransaction] = useState<
-    ITransaction | undefined
-  >();
-  const transctionModals: ModalProps[] = (modals.transactions ??
-    []) as ModalProps[];
+  const [selectedTransaction, setTransaction] = useState<ITransaction | undefined>();
+
+  const transctionModals: ModalProps[] = (modals.transactions ?? []) as ModalProps[];
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -168,13 +165,14 @@ export default function Transaction() {
             size="sm"
             onClose={handleOnCloseModal}
           >
-            {modal?.id === 'create-transaction-modal' && <CreateForm />}
-            {modal?.id === 'update-transaction-modal' && (
-              <UpdateForm transaction={selectedTransaction} />
-            )}
-            {modal?.id === 'delete-transaction-modal' && (
-              <DeleteForm transactionId={selectedTransaction?.id} />
-            )}
+            {
+              [
+                'update-transaction-modal', 
+                'create-transaction-modal'
+              ]
+              .includes(modal?.id) && <CreateOrUpdateForm action={modal.action} transaction={selectedTransaction} dismiss={() => setIsOpen(false)} />
+            }
+            {modal?.id === 'delete-transaction-modal' && <DeleteForm dismiss={() => setIsOpen(false)} transactionId={selectedTransaction?.id} />}
           </Modal>
         )}
       </div>

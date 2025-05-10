@@ -3,7 +3,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { MdOutlineAlternateEmail } from 'react-icons/md';
 import { IoKeyOutline } from 'react-icons/io5';
-import { AiOutlineLoading } from 'react-icons/ai';
 import { useLoading } from '@/hooks/loading';
 import { FormInput } from '@/components/FormInput';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +10,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useAuth } from '@/context/AuthContext';
 import { auth } from '@/firebase';
 import { FirebaseError } from 'firebase/app';
+import CustomButton from '@/components/CustomButton';
 
 const loginSchema = z.object({
     email: z
@@ -60,6 +60,7 @@ export default function LoginForm() {
             </h1>
             <p className="text-xs sm:text-sm text-slate-300">Enter your credentials to view all insights</p>
         </div>
+        
         <FormInput
             name="email"
             label="Email"
@@ -84,12 +85,13 @@ export default function LoginForm() {
             prependIcon={<IoKeyOutline color="#cfff04" size={20} />}
         />
 
-        <button
+        <CustomButton
+            isLoading={isLoading}
             type="submit"
             disabled={isLoading}
             className="bg-electric-lime flex justify-center items-center text-slate-900 w-full text-sm p-3 rounded disabled:opacity-75 cursor-pointer disabled:cursor-not-allowed"
         >
-            {isLoading ? <AiOutlineLoading className="animate-spin" size={20}/> : 'Login'}
-        </button>
+            {isLoading ? 'Logging in...': 'Login'}
+        </CustomButton>
     </form>)
 }

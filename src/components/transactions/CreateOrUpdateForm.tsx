@@ -1,14 +1,21 @@
-import React from 'react';
+import { useEffect } from 'react';
 import { FormInput } from '../FormInput';
 import CustomButton from '../CustomButton';
 import { transactionFormSchema, TransactionFormType } from '@/validators';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { save } from '@/services/transactions';
+import { save, update } from '@/services/transactions';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLoading } from '@/hooks/loading';
 import toast from 'react-hot-toast';
+import { ITransaction, ModalAction } from '@/types';
 
-const CreateForm = () => {
+type CreateOrUpdateFormProp = {
+  dismiss: () => void,
+  transaction?: ITransaction
+  action: Omit<ModalAction, 'delete'>
+}
+
+const CreateOrUpdateForm = ({ dismiss, transaction, action }: CreateOrUpdateFormProp) => {
   const { isLoading, startLoading, stopLoading } = useLoading();
 
   const {
@@ -23,22 +30,43 @@ const CreateForm = () => {
   
   const onSubmit: SubmitHandler<TransactionFormType> = async (data) => {
     startLoading();
-    save(data)
-      .then(handleSuccessReponse)
-      .finally(stopLoading);
+    if(action === 'create') {
+      save(data)
+        .then(handleSuccessReponse)
+        .finally(stopLoading);
+      return
+    } 
+
+    if(action === 'update') {
+      update(transaction?.id as string, data)
+        .then(handleSuccessReponse)
+        .finally(stopLoading)
+        
+      return
+    }
   };
 
   const handleSuccessReponse = () => {
-    // setIsOpen(false);
+    dismiss();
     reset();
-    toast.success('Transaction saved');
+    toast.success(`Transaction successfully ${action}d.`)
   }
-  const handleTransactionTypeChange = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const value = e.target.value as 'income' | 'expense';
-    setValue('type', value);
-  };
+
+  useEffect(() => {
+    
+    if(action === 'update' && transaction) {
+      console.log(transaction)
+      setValue('transaction', transaction.transaction);
+      setValue('type', transaction.type, {
+        shouldValidate: true,
+        shouldDirty: true,
+        shouldTouch: true
+      });
+      setValue('amount', String(transaction.amount));
+    }
+
+  }, []);
+
   return (
     <form className="space-y-2" onSubmit={handleSubmit(onSubmit)}>
       <FormInput
@@ -57,16 +85,9 @@ const CreateForm = () => {
         type="select"
         register={register}
         error={errors.type}
-        onSelectChange={handleTransactionTypeChange}
         selectOptions={[
-          {
-            label: 'Income',
-            value: 'income',
-          },
-          {
-            label: 'Expense',
-            value: 'expense',
-          },
+          { label: 'Income', value: 'income' },
+          { label: 'Expense', value: 'expense' },
         ]}
         className="w-full"
         containerClass="w-full"
@@ -81,11 +102,16 @@ const CreateForm = () => {
         placeholder="Enter amout"
         containerClass="w-full"
       />
-      <CustomButton disabled={isLoading} type="submit" className="w-full mt-4">
+      <CustomButton 
+        isLoading={isLoading}
+        disabled={isLoading} 
+        type="submit" 
+        className="w-full mt-4"
+      >
         Submit
       </CustomButton>
     </form>
   );
 };
 
-export default CreateForm;
+export default CreateOrUpdateForm;

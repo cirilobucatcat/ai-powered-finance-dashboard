@@ -4,12 +4,14 @@ import { AiOutlineLoading } from 'react-icons/ai';
 type CustomButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: React.ReactNode;
   className?: string;
+  isLoading: boolean;
 };
 
 const CustomButton = ({
   children,
   className = '',
   disabled,
+  isLoading,
   ...props
 }: CustomButtonProps) => {
 
@@ -19,7 +21,7 @@ const CustomButton = ({
       disabled={disabled}
       {...props}
     >
-      {disabled && <AiOutlineLoading size={18} color="#0f172b " className="animate-spin" />}
+      {isLoading && <AiOutlineLoading size={18} color="#0f172b " className="animate-spin" />}
       {children}
     </button>
   );
