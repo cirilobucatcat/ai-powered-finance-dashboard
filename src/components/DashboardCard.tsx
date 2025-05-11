@@ -1,8 +1,11 @@
+import React from "react"
+
 type DashboardCardProps = {
     title: string
     icon: React.ReactNode
     amount: string
 }
+
 export default function DashboardCard({title, icon, amount} : DashboardCardProps) {
     return(
         <div className="relative w-full h-32 bg-linear-to-r from-slate-900 to-slate-800 shadow rounded-md p-4">

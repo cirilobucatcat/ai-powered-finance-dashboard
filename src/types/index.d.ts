@@ -57,7 +57,7 @@ export type ModalProps = {
 export type DataTableColumn = {
   title: string;
   key: string;
-  format?: 'currency'
+  format?: 'currency';
   align?: 'left' | 'center' | 'right' | 'justify' | 'char';
   render?: (data: TData) => string | React.ReactNode;
 };
@@ -65,4 +65,10 @@ export type DataTableColumn = {
 export type DataTableProp<TData> = {
   columns: DataTableColumn[];
   data: TData[];
+};
+
+export type DashboardCountData = {
+  income: number;
+  expense: number;
+  saving: number;
 };
