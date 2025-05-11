@@ -4,7 +4,7 @@ import { AiOutlineLoading } from 'react-icons/ai';
 type CustomButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: React.ReactNode;
   className?: string;
-  isLoading: boolean;
+  isLoading?: boolean;
 };
 
 const CustomButton = ({

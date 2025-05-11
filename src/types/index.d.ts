@@ -1,4 +1,4 @@
-import {
+import React, {
   ChangeEventHandler,
   HTMLInputTypeAttribute,
   SelectHTMLAttributes,
@@ -51,5 +51,18 @@ export type ModalAction = 'create' | 'update' | 'delete';
 export type ModalProps = {
   title: string;
   id: string;
-  action: ModalAction
+  action: ModalAction;
+};
+
+export type DataTableColumn = {
+  title: string;
+  key: string;
+  format?: 'currency'
+  align?: 'left' | 'center' | 'right' | 'justify' | 'char';
+  render?: (data: TData) => string | React.ReactNode;
+};
+
+export type DataTableProp<TData> = {
+  columns: DataTableColumn[];
+  data: TData[];
 };
