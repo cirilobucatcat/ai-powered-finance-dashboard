@@ -142,14 +142,23 @@ export default function Dashboard() {
             amount={formatToCurrency(dashboardCount.saving)}
           />
         </div>
-        <div className='bg-slate-900 p-6 rounded-lg my-4'>
-          <CChart
-            type='bar'
-            data={barChartData}
-            options={{ responsive: true }}
-          />
+      <div className=' my-4 grid grid-cols-1 md:grid-cols-2 gap-4'>
+          <div className='bg-slate-900 p-6 rounded-lg'>
+            <CChart
+              type='bar'
+              data={barChartData}
+              options={{ responsive: true }}
+            />
+          </div>
+          <div className='bg-slate-900 p-6 rounded-lg '>
+            <CChart
+              type='bar'
+              data={barChartData}
+              options={{ responsive: true }}
+            />
+          </div>
         </div>
-        <div className='my-4 bg-slate-900 py-4 rounded-lg px-6'>
+        <div className='mb-4 bg-slate-900 py-4 rounded-lg px-6'>
           <p className='text-slate-50 font-bold tracking-wide mb-2 text-xl'>
             AI Insight
           </p>

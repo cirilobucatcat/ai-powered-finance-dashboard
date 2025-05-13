@@ -62,6 +62,7 @@ export const save = async (data: any): Promise<ResponseType> => {
         await addDoc(collection(db, collectionName), { 
             userId: user.uid, 
             ...data, 
+            category: (data.category as string).toUpperCase(),
             createdAt: serverTimestamp(),
             updatedAt: null
         });
@@ -89,6 +90,7 @@ export const update = async (transactionId: string, data: any) => {
 
         await updateDoc(doc(db, collectionName, transactionId), { 
             ...data,
+            category: (data.category as string).toUpperCase(),
             userId: user.uid, 
             updatedAt: serverTimestamp()
         });

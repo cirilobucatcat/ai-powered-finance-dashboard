@@ -55,13 +55,14 @@ const CreateOrUpdateForm = ({ dismiss, transaction, action }: CreateOrUpdateForm
   useEffect(() => {
     
     if(action === 'update' && transaction) {
-      console.log(transaction)
       setValue('transaction', transaction.transaction);
       setValue('type', transaction.type, {
         shouldValidate: true,
         shouldDirty: true,
         shouldTouch: true
       });
+      setValue('transactionAt', transaction.transactionAt);
+      setValue('category', transaction.category);
       setValue('amount', String(transaction.amount));
     }
 
@@ -99,7 +100,26 @@ const CreateOrUpdateForm = ({ dismiss, transaction, action }: CreateOrUpdateForm
         register={register}
         error={errors.amount}
         className="w-full"
-        placeholder="Enter amout"
+        placeholder="Enter amount"
+        containerClass="w-full"
+      />
+      <FormInput
+        name="category"
+        label="Category"
+        type="text"
+        register={register}
+        error={errors.category}
+        className="w-full"
+        placeholder="Enter category"
+        containerClass="w-full"
+      />
+      <FormInput
+        name="transactionAt"
+        label="Date"
+        type="date"
+        register={register}
+        error={errors.transactionAt}
+        className="w-full"
         containerClass="w-full"
       />
       <CustomButton 

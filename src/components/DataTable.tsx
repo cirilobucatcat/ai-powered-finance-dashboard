@@ -1,9 +1,10 @@
 import { DataTableColumn, DataTableProp } from '@/types';
-import { formatToCurrency } from '@/utils/helpers';
+import { formatToCurrency, formatToDate } from '@/utils/helpers';
 
 const DataTable = <TData extends Record<string, any>>({
   columns,
   data,
+  ...props
 }: DataTableProp<TData>) => {
   const renderData = (column: DataTableColumn, row: TData) => {
     let formattedData = null;
@@ -12,6 +13,9 @@ const DataTable = <TData extends Record<string, any>>({
       case 'currency':
         formattedData = formatToCurrency(parseInt(String(row[column.key])));
         break;
+      case 'date':
+        formattedData = row[column.key] ? formatToDate(row[column.key]) : 'Invalid date'
+        break
       default:
         formattedData = row[column.key];
         break;
@@ -25,7 +29,7 @@ const DataTable = <TData extends Record<string, any>>({
   };
 
   return (
-    <table className='text-electric-lime my-10 bg-slate-950 rounded-lg'>
+    <table {...props} className='text-electric-lime my-10 bg-slate-950 rounded-lg'>
       <thead>
         <tr>
           {columns.map((column) => (

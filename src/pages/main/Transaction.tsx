@@ -44,6 +44,17 @@ export default function Transaction() {
       },
     },
     {
+      title: 'Category',
+      key: 'category',
+      align: 'center',
+    },
+    {
+      title: 'Transaction Date',
+      key: 'transactionAt',
+      format: 'date',
+      align: 'center',
+    },
+    {
       title: 'Actions',
       key: 'id',
       align: 'center',
@@ -106,7 +117,7 @@ export default function Transaction() {
   return (
     <>
       <SEO title='Transactions' />
-      <div className='p-6 flex flex-col bg-slate-900 mx-6 mt-36 sm:mt-24 md:mt-24 rounded-lg'>
+      <div className='p-6 flex flex-col bg-slate-900 mx-6 mt-36 sm:mt-24 md:mt-24 rounded-lg mb-16'>
         <h1 className='text-electric-lime text-2xl uppercase font-bold mb-4'>
           Transactions
         </h1>
@@ -160,7 +171,6 @@ export default function Transaction() {
           </CustomButton>
         </div>
         <DataTable columns={transctionColumns} data={transactions} />
-        <Pagination className='ml-auto bg-slate-900' />
         {modal && (
           <Modal
             title={modal?.title ?? 'Modal Title'}

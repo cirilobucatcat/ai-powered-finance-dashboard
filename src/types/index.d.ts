@@ -2,6 +2,7 @@ import React, {
   ChangeEventHandler,
   HTMLInputTypeAttribute,
   SelectHTMLAttributes,
+  TableHTMLAttributes,
 } from 'react';
 import {
   FieldError,
@@ -42,7 +43,9 @@ export interface ITransaction {
   id: string;
   transaction: string;
   type: 'income' | 'expense';
+  transactionAt: string;
   amount: number;
+  category: string;
   userId: string;
 }
 
@@ -57,12 +60,12 @@ export type ModalProps = {
 export type DataTableColumn = {
   title: string;
   key: string;
-  format?: 'currency';
+  format?: 'currency' | 'date';
   align?: 'left' | 'center' | 'right' | 'justify' | 'char';
   render?: (data: TData) => string | React.ReactNode;
 };
 
-export type DataTableProp<TData> = {
+export type DataTableProp<TData> = TableHTMLAttributes<HTMLTableElement> & {
   columns: DataTableColumn[];
   data: TData[];
 };
