@@ -6,6 +6,7 @@ import Transaction from './pages/main/Transaction';
 import Dashboard from './pages/main/Dashboard';
 import { Toaster } from 'react-hot-toast';
 import { customToasterProps } from './utils/constants';
+import Insights from './pages/main/Insights';
 
 export default function App() {
 
@@ -26,6 +27,14 @@ export default function App() {
           element={
             <PrivateRoute>
               <Transaction />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/insights"
+          element={
+            <PrivateRoute>
+              <Insights />
             </PrivateRoute>
           }
         />

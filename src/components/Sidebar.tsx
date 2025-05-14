@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { MdOutlineDashboard } from 'react-icons/md';
 import { NavLink } from 'react-router-dom';
-import { FaMoneyBillTransfer } from 'react-icons/fa6';
+import { FaLightbulb, FaMoneyBillTransfer } from 'react-icons/fa6';
+import { GoSidebarCollapse, GoSidebarExpand } from "react-icons/go";
 
 export default function Sidebar() {
 
@@ -40,9 +41,24 @@ export default function Sidebar() {
                         </div>
                     )}
                 </NavLink>
+                <NavLink
+                    to='/insights'
+                    title='Insights'
+                    className={({ isActive }) => (navState[isActive ? 'active' : 'inactive'])}
+                >
+                    {({ isActive }) => (
+                        <div className="flex gap-4">
+                            <FaLightbulb className="group-hover:text-electric-lime transition-colors delay-75" size={22} color={`${isActive ? '#CFFF04' : ''}`} />
+                            {show && <p className={`text-sm group-hover:text-electric-lime transition-colors delay-75 ${isActive && 'text-electric-lime'}`}>Insights</p>}
+                        </div>
+                    )}
+                </NavLink>
             </ul>
-            <button onClick={() => setShow((val) => !val)} className="cursor-pointer mt-auto mb-4 bg-electric-lime hover:bg-electric-lime/75 rounded-s-full rounded-e-full text-sm uppercase text-slate-900 font-bold py-2 mx-4">
-                Add Card
+            <button
+                onClick={() => setShow((val) => !val)}
+                className={`bg-slate-950 text-electric-lime flex items-center justify-center rounded-md size-12 cursor-pointer mt-auto mb-4 ${show ? 'ml-auto mr-4' : 'mx-auto'}`}
+            >
+                {show ? <GoSidebarCollapse size={24} /> : <GoSidebarExpand size={24} />}
             </button>
         </div>
     )
