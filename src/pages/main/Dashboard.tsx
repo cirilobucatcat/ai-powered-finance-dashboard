@@ -141,6 +141,29 @@ export default function Dashboard() {
     ],
   };
 
+  const pieChartData: ChartData<'pie'> = {
+    labels: month,
+    datasets: [
+      {
+        label: 'Income',
+        data: [12, 20, 10, 50, 10, 10, 19, 3],
+        borderWidth: 1,
+        backgroundColor: (context: any) => {
+          const chart = context.chart;
+          const { ctx, chartArea } = chart;
+          if (!chartArea) return null;
+
+          const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+          gradient.addColorStop(0, 'rgba(35, 35, 255, 1)');
+          gradient.addColorStop(1, 'rgba(29,41,61, 0)');
+
+          return gradient;
+        },
+        borderColor: 'rgba(35, 35, 255, 1)',
+      }
+    ],
+  };
+
   useEffect(() => {
 
     getCurrentMonth();
@@ -219,7 +242,7 @@ export default function Dashboard() {
                 plugins: {
                   title: {
                     display: true,
-                    text: ''
+                    text: 'Monthly Comparson'
                   }
                 }
               }}
@@ -227,8 +250,8 @@ export default function Dashboard() {
           </div>
           <div className='bg-slate-900 p-6 rounded-lg col-span-3'>
             <CChart
-              type='bar'
-              data={barChartData}
+              type='pie'
+              data={pieChartData}
               options={{ responsive: true }}
             />
           </div>

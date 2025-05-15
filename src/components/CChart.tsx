@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, CanvasHTMLAttributes } from 'react';
 import {
     Chart,
     ChartType,
@@ -7,7 +7,7 @@ import {
     ChartOptions,
 } from 'chart.js/auto';
 
-interface ReusableChartProps<T extends ChartType> {
+type ReusableChartProps<T extends ChartType> = CanvasHTMLAttributes<HTMLCanvasElement> & {
     type: T;
     data: ChartData<T>;
     options?: ChartOptions<T>;
@@ -17,7 +17,8 @@ const ReusableChart = <T extends ChartType>({
     type,
     data,
     options,
-}: ReusableChartProps<T>) => {
+    ...props
+}: ReusableChartProps <T>) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const chartRef = useRef<Chart<T> | null>(null);
 
@@ -44,7 +45,7 @@ const ReusableChart = <T extends ChartType>({
         };
     }, [type, data, options]);
 
-    return <canvas ref={canvasRef} />;
+    return <canvas {...props} ref={canvasRef} />;
 };
 
 export default ReusableChart;
