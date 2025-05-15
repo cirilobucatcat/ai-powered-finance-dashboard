@@ -71,7 +71,7 @@ export type DataTableProp<TData> = TableHTMLAttributes<HTMLTableElement> & {
 };
 
 export type DashboardCountData = {
-  income: number;
-  expense: number;
-  saving: number;
+  monthIncome: number;
+  monthExpense: number;
+  monthSaving: number;
 };

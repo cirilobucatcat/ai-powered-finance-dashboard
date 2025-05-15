@@ -10,30 +10,20 @@ import { useEffect, useState } from 'react';
 import { listen } from '@/services/dashboard';
 import { DashboardCountData } from '@/types';
 import { formatToCurrency } from '@/utils/helpers';
+import { useDate } from '@/hooks/date';
+import { month } from '@/utils/constants';
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const { currentMonth, getCurrentMonth } = useDate()
   const [dashboardCount, setDashboardCount] = useState<DashboardCountData>({
-    income: 0,
-    expense: 0,
-    saving: 0,
+    monthExpense: 0,
+    monthIncome: 0,
+    monthSaving: 0,
   });
 
   const barChartData: ChartData<'bar'> = {
-    labels: [
-      'January',
-      'Febuary',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ],
+    labels: month,
     datasets: [
       {
         label: 'Income',
@@ -102,7 +92,59 @@ export default function Dashboard() {
     ],
   };
 
+  const lineChartData: ChartData<'line'> = {
+    labels: month,
+    datasets: [
+      {
+        label: 'Income',
+        data: [12, 20, 10, 50, 10, 10, 19, 3],
+        borderWidth: 1,
+        backgroundColor: (context: any) => {
+          const chart = context.chart;
+          const { ctx, chartArea } = chart;
+          if (!chartArea) return null;
+
+          const gradient = ctx.createLinearGradient(
+            0,
+            chartArea.top,
+            0,
+            chartArea.bottom
+          );
+          gradient.addColorStop(0, 'rgba(35, 35, 255, 1)');
+
+          gradient.addColorStop(1, 'rgba(29,41,61, 0)');
+          return gradient;
+        },
+        borderColor: 'rgba(35, 35, 255, 1)',
+      },
+      {
+        label: 'Expenses',
+        data: [20, 10, 50, 10, 10, 12, 15, 10],
+        borderWidth: 1,
+        backgroundColor: (context: any) => {
+          const chart = context.chart;
+          const { ctx, chartArea } = chart;
+          if (!chartArea) return null;
+
+          const gradient = ctx.createLinearGradient(
+            0,
+            chartArea.top,
+            0,
+            chartArea.bottom
+          );
+          gradient.addColorStop(0, 'rgba(255, 24, 24, 1)');
+          gradient.addColorStop(1, 'rgba(29,41,61, 0)');
+          return gradient;
+        },
+        borderColor: 'rgba(255, 24, 24, 1)',
+      },
+    ],
+  };
+
   useEffect(() => {
+
+    getCurrentMonth();
+
     const unsubscribe = listen((data) => {
       setDashboardCount(data);
       return data;
@@ -127,30 +169,63 @@ export default function Dashboard() {
         </p>
         <div className='flex flex-col md:flex-row items-center justify-center gap-4'>
           <DashboardCard
-            title='Total Income'
+            title={`Total Income this month (${currentMonth})`}
             icon={<img src={money} width={40} />}
-            amount={formatToCurrency(dashboardCount.income)}
+            amount={formatToCurrency(dashboardCount.monthIncome)}
           />
           <DashboardCard
-            title='Total Expenses'
+            title={`Total Expenses this month (${currentMonth})`}
             icon={<img src={wallet} width={40} />}
-            amount={formatToCurrency(dashboardCount.expense)}
+            amount={formatToCurrency(dashboardCount.monthExpense)}
           />
           <DashboardCard
-            title='Total Saving'
+            title={`Total Saving this month (${currentMonth})`}
             icon={<img src={moneyBag} width={40} />}
-            amount={formatToCurrency(dashboardCount.saving)}
+            amount={formatToCurrency(dashboardCount.monthSaving)}
+            percentageDetail={{
+              value: ((dashboardCount.monthSaving / dashboardCount.monthIncome) * 100),
+              description: 'Saving rate'
+            }}
           />
         </div>
-      <div className=' my-4 grid grid-cols-1 md:grid-cols-2 gap-4'>
-          <div className='bg-slate-900 p-6 rounded-lg'>
+        <div className=' my-4 grid grid-cols-1 md:grid-cols-6 gap-4'>
+          <div className='bg-slate-900 p-6 rounded-lg col-span-full'>
+            <CChart
+              type='line'
+              data={lineChartData}
+              options={{
+                responsive: true,
+                plugins: {
+                  title: {
+                    display: true,
+                    text: 'Income vs Expense'
+                  },
+                },
+                scales: {
+                  y: {
+                    min: 0,
+                    max: 10_000,
+                  }
+                }
+              }}
+            />
+          </div>
+          <div className='bg-slate-900 p-6 rounded-lg col-span-3'>
             <CChart
               type='bar'
               data={barChartData}
-              options={{ responsive: true }}
+              options={{
+                responsive: true,
+                plugins: {
+                  title: {
+                    display: true,
+                    text: ''
+                  }
+                }
+              }}
             />
           </div>
-          <div className='bg-slate-900 p-6 rounded-lg '>
+          <div className='bg-slate-900 p-6 rounded-lg col-span-3'>
             <CChart
               type='bar'
               data={barChartData}
