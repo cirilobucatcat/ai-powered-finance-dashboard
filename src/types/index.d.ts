@@ -17,7 +17,7 @@ type OptionProps = {
 };
 
 type IncomeVsExpense = {
-  month: string;
+  year: number | string;
   totalExpense: number;
   totalIncome: number;
 }

@@ -94,7 +94,7 @@ export default function Dashboard() {
   };
 
   const lineChartData: ChartData<'line'> = {
-    labels: dashboardCount.incomeVsExpense.map((incomeVsExpense) => incomeVsExpense.month),
+    labels: dashboardCount.incomeVsExpense.map((incomeVsExpense) => incomeVsExpense.year.toString()),
     datasets: [
       {
         label: 'Income',
@@ -117,6 +117,7 @@ export default function Dashboard() {
           return gradient;
         },
         borderColor: 'rgba(35, 35, 255, 1)',
+        tension: 0.4
       },
       {
         label: 'Expenses',
@@ -138,6 +139,7 @@ export default function Dashboard() {
           return gradient;
         },
         borderColor: 'rgba(255, 24, 24, 1)',
+        tension: 0.4
       },
     ],
   };
@@ -213,7 +215,7 @@ export default function Dashboard() {
           />
         </div>
         <div className=' my-4 grid grid-cols-1 md:grid-cols-6 gap-4'>
-          <div className='bg-slate-900 p-6 rounded-lg col-span-full'>
+          <div className='bg-linear-to-r from-slate-900 to-slate-800 p-6 rounded-lg col-span-full'>
             <CChart
               type='line'
               data={lineChartData}
@@ -222,7 +224,12 @@ export default function Dashboard() {
                 plugins: {
                   title: {
                     display: true,
-                    text: 'Income vs Expense'
+                    text: 'INCOME VS EXPENSE (OVER TIME)',
+                    color: '#f8fafc',
+                    font: {
+                      family: 'Open Sans',
+                      size: 18
+                    }
                   },
                 },
                 scales: {
