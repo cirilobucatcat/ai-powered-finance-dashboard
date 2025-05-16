@@ -44,17 +44,12 @@ export const listen = (callback: (data: DashboardCountData) => DashboardCountDat
     return unsubscribe;
 }
 
-function getYearlyIncomeVsExpense(transactions: CollectionTransaction[]) {
+const getYearlyIncomeVsExpense = (transactions: CollectionTransaction[]) => {
 
     return getFiveYears().map((year) => {
 
-        let totalExpense = totalByTransactionType(transactions.filter((transaction) => {
-            return filterYear(transaction, year)
-        }), 'expense')
-
-        let totalIncome = totalByTransactionType(transactions.filter((transaction) => {
-            return filterYear(transaction, year)
-        }), 'income')
+        let totalExpense = totalByTransactionType(transactions.filter((transaction) => filterYear(transaction, year)), 'expense')
+        let totalIncome = totalByTransactionType(transactions.filter((transaction) => filterYear(transaction, year)), 'income')
 
         return {
             year,
@@ -64,9 +59,7 @@ function getYearlyIncomeVsExpense(transactions: CollectionTransaction[]) {
     })
 }
 
-const filterYear = (transaction: CollectionTransaction, year: number) => {
-    return parseInt(transaction.date[0]) === year;
-}
+const filterYear = (transaction: CollectionTransaction, year: number) => parseInt(transaction.date[0]) === year;
 
 const totalByTransactionType = (transactions: CollectionTransaction[], type: ITransaction['type']) => {
     return transactions
