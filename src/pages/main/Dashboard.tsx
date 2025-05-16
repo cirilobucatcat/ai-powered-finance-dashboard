@@ -20,6 +20,7 @@ export default function Dashboard() {
     monthExpense: 0,
     monthIncome: 0,
     monthSaving: 0,
+    incomeVsExpense: []
   });
 
   const barChartData: ChartData<'bar'> = {
@@ -93,11 +94,11 @@ export default function Dashboard() {
   };
 
   const lineChartData: ChartData<'line'> = {
-    labels: month,
+    labels: dashboardCount.incomeVsExpense.map((incomeVsExpense) => incomeVsExpense.month),
     datasets: [
       {
         label: 'Income',
-        data: [12, 20, 10, 50, 10, 10, 19, 3],
+        data: dashboardCount.incomeVsExpense.map((incomeVsExpense) => incomeVsExpense.totalIncome),
         borderWidth: 1,
         backgroundColor: (context: any) => {
           const chart = context.chart;
@@ -119,7 +120,7 @@ export default function Dashboard() {
       },
       {
         label: 'Expenses',
-        data: [20, 10, 50, 10, 10, 12, 15, 10],
+        data: dashboardCount.incomeVsExpense.map((incomeVsExpense) => incomeVsExpense.totalExpense),
         borderWidth: 1,
         backgroundColor: (context: any) => {
           const chart = context.chart;
@@ -227,7 +228,7 @@ export default function Dashboard() {
                 scales: {
                   y: {
                     min: 0,
-                    max: 10_000,
+                    max: 100_000,
                   }
                 }
               }}

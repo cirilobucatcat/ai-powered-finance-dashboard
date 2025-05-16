@@ -16,6 +16,12 @@ type OptionProps = {
   label: string;
 };
 
+type IncomeVsExpense = {
+  month: string;
+  totalExpense: number;
+  totalIncome: number;
+}
+
 export type FormInputProps<T extends FieldValues> = {
   prependIcon?: React.ReactNode;
   name: Path<T>;
@@ -74,4 +80,5 @@ export type DashboardCountData = {
   monthIncome: number;
   monthExpense: number;
   monthSaving: number;
+  incomeVsExpense: IncomeVsExpense[]
 };
