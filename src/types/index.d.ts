@@ -16,11 +16,7 @@ type OptionProps = {
   label: string;
 };
 
-type IncomeVsExpense = {
-  year: number | string;
-  totalExpense: number;
-  totalIncome: number;
-}
+
 
 export type FormInputProps<T extends FieldValues> = {
   prependIcon?: React.ReactNode;
@@ -76,9 +72,19 @@ export type DataTableProp<TData> = TableHTMLAttributes<HTMLTableElement> & {
   data: TData[];
 };
 
+type IncomeVsExpense = {
+  year: number | string;
+  totalExpense: number;
+  totalIncome: number;
+}
+
 export type DashboardCountData = {
   monthIncome: number;
   monthExpense: number;
   monthSaving: number;
   incomeVsExpense: IncomeVsExpense[]
+  spendingByCategory: {
+    category: string,
+    amount: number
+  }[]
 };

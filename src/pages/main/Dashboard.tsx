@@ -11,16 +11,18 @@ import { listen } from '@/services/dashboard';
 import { DashboardCountData } from '@/types';
 import { formatToCurrency } from '@/utils/helpers';
 import { useDate } from '@/hooks/date';
-import { month } from '@/utils/constants';
+import { month, neonColors } from '@/utils/constants';
 
 export default function Dashboard() {
   const { user } = useAuth();
-  const { currentMonth, getCurrentMonth } = useDate()
+  const { currentMonth, currentYear, getCurrentMonth, getCurrentYear } =
+    useDate();
   const [dashboardCount, setDashboardCount] = useState<DashboardCountData>({
     monthExpense: 0,
     monthIncome: 0,
     monthSaving: 0,
-    incomeVsExpense: []
+    incomeVsExpense: [],
+    spendingByCategory: [],
   });
 
   const barChartData: ChartData<'bar'> = {
@@ -94,11 +96,15 @@ export default function Dashboard() {
   };
 
   const lineChartData: ChartData<'line'> = {
-    labels: dashboardCount.incomeVsExpense.map((incomeVsExpense) => incomeVsExpense.year.toString()),
+    labels: dashboardCount.incomeVsExpense.map((incomeVsExpense) =>
+      incomeVsExpense.year.toString()
+    ),
     datasets: [
       {
         label: 'Income',
-        data: dashboardCount.incomeVsExpense.map((incomeVsExpense) => incomeVsExpense.totalIncome),
+        data: dashboardCount.incomeVsExpense.map(
+          (incomeVsExpense) => incomeVsExpense.totalIncome
+        ),
         borderWidth: 1,
         backgroundColor: (context: any) => {
           const chart = context.chart;
@@ -112,16 +118,18 @@ export default function Dashboard() {
             chartArea.bottom
           );
           gradient.addColorStop(0, 'rgba(35, 35, 255, 1)');
-
           gradient.addColorStop(1, 'rgba(29,41,61, 0)');
+
           return gradient;
         },
         borderColor: 'rgba(35, 35, 255, 1)',
-        tension: 0.4
+        tension: 0.4,
       },
       {
         label: 'Expenses',
-        data: dashboardCount.incomeVsExpense.map((incomeVsExpense) => incomeVsExpense.totalExpense),
+        data: dashboardCount.incomeVsExpense.map(
+          (incomeVsExpense) => incomeVsExpense.totalExpense
+        ),
         borderWidth: 1,
         backgroundColor: (context: any) => {
           const chart = context.chart;
@@ -139,37 +147,29 @@ export default function Dashboard() {
           return gradient;
         },
         borderColor: 'rgba(255, 24, 24, 1)',
-        tension: 0.4
+        tension: 0.4,
       },
     ],
   };
 
   const pieChartData: ChartData<'pie'> = {
-    labels: month,
+    labels: dashboardCount.spendingByCategory.map(
+      (spending) => spending.category
+    ),
     datasets: [
       {
-        label: 'Income',
-        data: [12, 20, 10, 50, 10, 10, 19, 3],
-        borderWidth: 1,
-        backgroundColor: (context: any) => {
-          const chart = context.chart;
-          const { ctx, chartArea } = chart;
-          if (!chartArea) return null;
-
-          const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-          gradient.addColorStop(0, 'rgba(35, 35, 255, 1)');
-          gradient.addColorStop(1, 'rgba(29,41,61, 0)');
-
-          return gradient;
-        },
-        borderColor: 'rgba(35, 35, 255, 1)',
-      }
+        data: dashboardCount.spendingByCategory.map(
+          (spending) => spending.amount
+        ),
+        borderWidth: 0,
+        backgroundColor: neonColors,
+      },
     ],
   };
 
   useEffect(() => {
-
     getCurrentMonth();
+    getCurrentYear();
 
     const unsubscribe = listen((data) => {
       setDashboardCount(data);
@@ -195,32 +195,36 @@ export default function Dashboard() {
         </p>
         <div className='flex flex-col md:flex-row items-center justify-center gap-4'>
           <DashboardCard
-            title={`Total Income this month (${currentMonth})`}
+            title={`Total Income this month (${currentMonth} ${currentYear})`}
             icon={<img src={money} width={40} />}
             amount={formatToCurrency(dashboardCount.monthIncome)}
           />
           <DashboardCard
-            title={`Total Expenses this month (${currentMonth})`}
+            title={`Total Expenses this month (${currentMonth} ${currentYear})`}
             icon={<img src={wallet} width={40} />}
             amount={formatToCurrency(dashboardCount.monthExpense)}
           />
           <DashboardCard
-            title={`Total Saving this month (${currentMonth})`}
+            title={`Total Saving this month (${currentMonth} ${currentYear})`}
             icon={<img src={moneyBag} width={40} />}
             amount={formatToCurrency(dashboardCount.monthSaving)}
             percentageDetail={{
-              value: ((dashboardCount.monthSaving / dashboardCount.monthIncome) * 100),
-              description: 'Saving rate'
+              value:
+                (dashboardCount.monthSaving / dashboardCount.monthIncome) * 100,
+              description: 'Saving rate',
             }}
           />
         </div>
         <div className=' my-4 grid grid-cols-1 md:grid-cols-6 gap-4'>
-          <div className='bg-linear-to-r from-slate-900 to-slate-800 p-6 rounded-lg col-span-full'>
+          <div className='bg-linear-to-r h-[400px] md:h-[500px] w-full from-slate-900 to-slate-800 p-6 rounded-lg col-span-full'>
             <CChart
+              width='100%'
+              id='spendingByCategory'
               type='line'
               data={lineChartData}
               options={{
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                   title: {
                     display: true,
@@ -228,16 +232,16 @@ export default function Dashboard() {
                     color: '#f8fafc',
                     font: {
                       family: 'Open Sans',
-                      size: 18
-                    }
+                      size: 18,
+                    },
                   },
                 },
                 scales: {
                   y: {
                     min: 0,
                     max: 100_000,
-                  }
-                }
+                  },
+                },
               }}
             />
           </div>
@@ -247,12 +251,18 @@ export default function Dashboard() {
               data={barChartData}
               options={{
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                   title: {
                     display: true,
-                    text: 'Monthly Comparson'
-                  }
-                }
+                    text: `Monthly Comparson (${currentMonth} ${currentYear})`,
+                    color: '#f8fafc',
+                    font: {
+                      family: 'Open Sans',
+                      size: 18,
+                    },
+                  },
+                },
               }}
             />
           </div>
@@ -260,7 +270,21 @@ export default function Dashboard() {
             <CChart
               type='pie'
               data={pieChartData}
-              options={{ responsive: true }}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  title: {
+                    display: true,
+                    text: 'Spending by Category',
+                    color: '#f8fafc',
+                    font: {
+                      family: 'Open Sans',
+                      size: 18,
+                    },
+                  },
+                },
+              }}
             />
           </div>
         </div>

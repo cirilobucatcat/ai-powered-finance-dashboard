@@ -3,12 +3,18 @@ import { useState, useCallback } from 'react';
 
 export function useDate() {
 
+    const date = new Date();
     const [currentMonth, setCurrentMonth] = useState<string>('January');
+    const [currentYear, setCurrentYear] = useState<number>(date.getFullYear());
 
     const getCurrentMonth = useCallback(() => {
-        const date = new Date();
+        
         setCurrentMonth(month[date.getMonth()])
     }, []);
 
-    return { currentMonth, getCurrentMonth };
+    const getCurrentYear = useCallback(() => {
+        setCurrentYear(date.getFullYear())
+    }, []);
+
+    return { currentYear, currentMonth, getCurrentMonth, getCurrentYear };
 }
