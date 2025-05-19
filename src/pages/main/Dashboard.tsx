@@ -23,6 +23,7 @@ export default function Dashboard() {
     monthSaving: 0,
     incomeVsExpense: [],
     spendingByCategory: [],
+    monthlyComparison: []
   });
 
   const barChartData: ChartData<'bar'> = {
@@ -30,7 +31,7 @@ export default function Dashboard() {
     datasets: [
       {
         label: 'Income',
-        data: [12, 20, 10, 50, 10, 10, 19, 3],
+        data: dashboardCount.monthlyComparison.map(mc => mc.totalIncome),
         borderWidth: 1,
         backgroundColor: (context: any) => {
           const chart = context.chart;
@@ -52,7 +53,7 @@ export default function Dashboard() {
       },
       {
         label: 'Expenses',
-        data: [20, 10, 50, 10, 10, 12, 15, 10],
+        data: dashboardCount.monthlyComparison.map(mc => mc.totalExpense),
         borderWidth: 1,
         backgroundColor: (context: any) => {
           const chart = context.chart;
@@ -73,7 +74,7 @@ export default function Dashboard() {
       },
       {
         label: 'Savings',
-        data: [10, 9, 1, 20, 10, 50, 10, 10],
+        data: dashboardCount.monthlyComparison.map(mc => mc.totalSavings),
         borderWidth: 1,
         backgroundColor: (context: any) => {
           const chart = context.chart;
@@ -261,6 +262,12 @@ export default function Dashboard() {
                       family: 'Open Sans',
                       size: 18,
                     },
+                  },
+                },
+                scales: {
+                  y: {
+                    min: 0,
+                    max: 100_000,
                   },
                 },
               }}

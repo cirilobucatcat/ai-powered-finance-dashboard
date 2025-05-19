@@ -78,11 +78,17 @@ type IncomeVsExpense = {
   totalIncome: number;
 }
 
+type MonthlyComparison = Omit<IncomeVsExpense, 'year'> & {
+  month: string;
+  totalSavings: number
+}
+
 export type DashboardCountData = {
   monthIncome: number;
   monthExpense: number;
   monthSaving: number;
-  incomeVsExpense: IncomeVsExpense[]
+  incomeVsExpense: IncomeVsExpense[],
+  monthlyComparison: MonthlyComparison[]
   spendingByCategory: {
     category: string,
     amount: number

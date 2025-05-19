@@ -1,5 +1,6 @@
 import { auth, db } from '@/firebase';
 import { DashboardCountData, ITransaction } from '@/types';
+import { month } from '@/utils/constants';
 import { getFiveYears } from '@/utils/helpers';
 import {
   collection,
@@ -22,14 +23,12 @@ export const listen = (
 ): Unsubscribe => {
   const user = auth.currentUser;
 
-  if (!user) return () => {};
+  if (!user) return () => { };
 
   const q = query(
     collection(db, collectionName),
     where('userId', '==', user.uid)
   );
-
-  const currentMonth = new Date().getMonth() + 1;
 
   const unsubscribe = onSnapshot(q, (snapshot) => {
     const transactions = snapshot.docs.map((doc) => {
@@ -45,17 +44,24 @@ export const listen = (
       };
     });
 
+    const date = new Date();
+    const currentMonth = date.getMonth() + 1;
+    const currentYear = date.getFullYear();
+
     let monthlyTransactions = transactions.filter(
-      (transaction) => parseInt(transaction.date[1]) === currentMonth
+      (transaction) => parseInt(transaction.date[0]) === currentYear && parseInt(transaction.date[1]) === currentMonth
     );
     let monthIncome = totalByTransactionType(monthlyTransactions, 'income');
     let monthExpense = totalByTransactionType(monthlyTransactions, 'expense');
     let incomeVsExpense = getYearlyIncomeVsExpense(transactions);
+    let monthlyComparison = getMonthlyComparison(transactions, currentYear);
     let spendingByCategory = getSpendingByCategory(transactions);
 
+    console.log(monthlyComparison)
     callback({
       monthIncome,
       monthExpense,
+      monthlyComparison,
       monthSaving: monthIncome - monthExpense,
       incomeVsExpense,
       spendingByCategory,
@@ -64,6 +70,30 @@ export const listen = (
 
   return unsubscribe;
 };
+
+const getMonthlyComparison = (transactions: CollectionTransaction[], currentYear: number) => {
+
+  return month.map((_, index) => {
+
+    let currentMonth = index + 1;
+    let totalExpense = totalByTransactionType(
+      transactions.filter((transaction) => filterYear(transaction, currentYear) && filterMonth(transaction, currentMonth)),
+      'expense'
+    );
+    let totalIncome = totalByTransactionType(
+      transactions.filter((transaction) => filterYear(transaction, currentYear) && filterMonth(transaction, currentMonth)),
+      'income'
+    );
+
+    let totalSavings = totalIncome - totalExpense
+    return {
+      month: month[currentMonth - 1],
+      totalExpense,
+      totalIncome, 
+      totalSavings: totalSavings < 0 ? 0 : totalSavings
+    }
+  })
+}
 
 const getYearlyIncomeVsExpense = (transactions: CollectionTransaction[]) => {
   return getFiveYears().map((year) => {
@@ -109,7 +139,10 @@ const getSpendingByCategory = (transactions: CollectionTransaction[]) => {
 };
 
 const filterYear = (transaction: CollectionTransaction, year: number) =>
-  parseInt(transaction.date[0]) === year;
+  (parseInt(transaction.date[0]) === year);
+
+
+const filterMonth = (transaction: CollectionTransaction, month: number) => parseInt(transaction.date[1]) === month;
 
 const totalByTransactionType = (
   transactions: CollectionTransaction[],
