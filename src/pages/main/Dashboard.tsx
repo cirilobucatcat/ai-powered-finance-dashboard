@@ -256,7 +256,7 @@ export default function Dashboard() {
                 plugins: {
                   title: {
                     display: true,
-                    text: `Monthly Comparson (${currentMonth} ${currentYear})`,
+                    text: `Monthly Comparson (${currentYear})`,
                     color: '#f8fafc',
                     font: {
                       family: 'Open Sans',
