@@ -5,6 +5,7 @@ import { getFiveYears } from '@/utils/helpers';
 import {
   collection,
   onSnapshot,
+  orderBy,
   query,
   Unsubscribe,
   where,
@@ -27,22 +28,31 @@ export const listen = (
 
   const q = query(
     collection(db, collectionName),
-    where('userId', '==', user.uid)
+    where('userId', '==', user.uid),
+    orderBy('createdAt', 'desc')
   );
 
   const unsubscribe = onSnapshot(q, (snapshot) => {
+
     const transactions = snapshot.docs.map((doc) => {
-      let date = doc.data().transactionAt
+
+      let date: string[] = doc.data().transactionAt
         ? doc.data().transactionAt.split('-')
         : [];
-      let category = doc.data().category ?? 'UNCATEGORIZED';
+
+      let category: string = doc.data().category ?? 'UNCATEGORIZED';
+
+      let data = doc.data() as ITransaction;
+
       return {
-        type: doc.data().type,
-        amount: doc.data().amount,
+        ...data,
+        id: doc.id,
         category,
         date,
       };
+
     });
+
 
     const date = new Date();
     const currentMonth = date.getMonth() + 1;
@@ -57,7 +67,6 @@ export const listen = (
     let monthlyComparison = getMonthlyComparison(transactions, currentYear);
     let spendingByCategory = getSpendingByCategory(transactions);
 
-    console.log(monthlyComparison)
     callback({
       monthIncome,
       monthExpense,
@@ -65,6 +74,7 @@ export const listen = (
       monthSaving: monthIncome - monthExpense,
       incomeVsExpense,
       spendingByCategory,
+      transactions
     });
   });
 
@@ -89,7 +99,7 @@ const getMonthlyComparison = (transactions: CollectionTransaction[], currentYear
     return {
       month: month[currentMonth - 1],
       totalExpense,
-      totalIncome, 
+      totalIncome,
       totalSavings: totalSavings < 0 ? 0 : totalSavings
     }
   })

@@ -49,6 +49,7 @@ export interface ITransaction {
   amount: number;
   category: string;
   userId: string;
+  createdAt?: Date
 }
 
 export type ModalAction = 'create' | 'update' | 'delete';
@@ -92,5 +93,6 @@ export type DashboardCountData = {
   spendingByCategory: {
     category: string,
     amount: number
-  }[]
+  }[],
+  transactions: ITransaction[]
 };

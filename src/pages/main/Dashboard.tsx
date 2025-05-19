@@ -8,10 +8,12 @@ import CChart from '@/components/CChart';
 import { ChartData } from 'chart.js';
 import { useEffect, useState } from 'react';
 import { listen } from '@/services/dashboard';
-import { DashboardCountData } from '@/types';
+import { DashboardCountData, DataTableColumn, ITransaction } from '@/types';
 import { formatToCurrency } from '@/utils/helpers';
 import { useDate } from '@/hooks/date';
 import { month, neonColors } from '@/utils/constants';
+import DataTable from '@/components/DataTable';
+import Badge from '@/components/Badge';
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -23,8 +25,37 @@ export default function Dashboard() {
     monthSaving: 0,
     incomeVsExpense: [],
     spendingByCategory: [],
-    monthlyComparison: []
+    monthlyComparison: [],
+    transactions: []
   });
+
+  const transactionColumns: DataTableColumn[] = [
+    {
+      title: 'Transaction',
+      key: 'transaction',
+      align: 'right',
+    },
+    {
+      title: 'Amount',
+      format: 'currency',
+      key: 'amount',
+      align: 'right',
+    },
+    {
+      title: 'Type',
+      key: 'type',
+      align: 'center',
+      render(row) {
+        return <Badge type={row.type} />;
+      },
+    },
+    {
+      title: 'Transaction Date',
+      key: 'transactionAt',
+      format: 'date',
+      align: 'center',
+    },
+  ];
 
   const barChartData: ChartData<'bar'> = {
     labels: month,
@@ -294,20 +325,28 @@ export default function Dashboard() {
               }}
             />
           </div>
-        </div>
-        <div className='mb-4 bg-slate-900 py-4 rounded-lg px-6'>
-          <p className='text-slate-50 font-bold tracking-wide mb-2 text-xl'>
-            AI Insight
-          </p>
-          <p className='text-slate-100 text-justify text-sm'>
-            ✨Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-            Accusantium ipsum illum corrupti distinctio ratione et, vitae
-            repudiandae, consequatur doloribus ipsa quis qui temporibus eveniet
-            ducimus consectetur laboriosam. Nihil cupiditate aperiam quidem
-            asperiores nostrum fuga repellat sunt officiis, necessitatibus
-            veniam reiciendis vitae nulla earum consequuntur ratione saepe optio
-            corporis culpa quae.
-          </p>
+
+          <div className='bg-slate-900 h-fit p-6 rounded-lg col-span-2'>
+            <p className='text-slate-50 font-bold tracking-wide mb-2 text-xl'>
+              AI Insight
+            </p>
+            <p className='text-slate-100 text-justify text-sm'>
+              ✨Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+              Accusantium ipsum illum corrupti distinctio ratione et, vitae
+              repudiandae, consequatur doloribus ipsa quis qui temporibus eveniet
+              ducimus consectetur laboriosam. Nihil cupiditate aperiam quidem
+              asperiores nostrum fuga repellat sunt officiis, necessitatibus
+              veniam reiciendis vitae nulla earum consequuntur ratione saepe optio
+              corporis culpa quae.
+            </p>
+          </div>
+          <div className='bg-slate-900 p-4 rounded-lg col-span-4 flex items-center justify-center'>
+            <DataTable
+              width='100%'
+              columns={transactionColumns}
+              data={dashboardCount.transactions}
+            />
+          </div>
         </div>
       </div>
     </>
