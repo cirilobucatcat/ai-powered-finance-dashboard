@@ -11,10 +11,10 @@ function PrivateRoute({ children }: PrivateRouteProps) {
 
     const { user } = useAuth();
     return user ? <>
-        <div className='relative flex w-full bg-slate-950'>
+        <div className='flex w-full bg-slate-950'>
             <Sidebar />
-            <Profile />
-            <div className='w-full h-screen overflow-y-auto custom-scrollbar'>
+            <div className='w-full relative h-screen overflow-y-auto custom-scrollbar'>
+                <Profile />
                 {children}
             </div>
         </div>
