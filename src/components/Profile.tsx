@@ -28,18 +28,18 @@ export default function Profile() {
                             <p className="text-slate-400 text-xs">@username</p>
                         </div>
 
-                        <div className='flex flex-col gap-y-2 mt-4 px-2 rounded-md'>
+                        <div className='flex flex-col gap-y-4 my-4 px-4 rounded-md'>
                             <div className='w-full text-electric-lime flex flex-row items-center justify-start gap-x-2'>
                                 <div className='size-6 flex items-center justify-center bg-electric-lime rounded-full'>
                                     <GoGear color='#000' />
                                 </div>
-                                <p className='text-sm text-slate-50'>Profile Settings</p>
+                                <p className='text-xs text-slate-50'>Profile Settings</p>
                             </div>
                             <div role='button' onClick={() => handleSignOut()} className='w-full text-electric-lime flex flex-row items-center justify-start gap-x-2 cursor-pointer'>
                                 <div className='size-6 flex items-center justify-center bg-electric-lime rounded-full'>
                                     <GoSignOut color='#000' />
                                 </div>
-                                <p className='text-sm text-slate-50'>Logout</p>
+                                <p className='text-xs text-slate-50'>Logout</p>
                             </div>
                         </div>
                     </div>

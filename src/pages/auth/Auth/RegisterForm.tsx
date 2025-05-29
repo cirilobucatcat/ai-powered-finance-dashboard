@@ -61,6 +61,7 @@ export default function RegisterForm() {
         <FormInput
             name="full_name"
             label="Full Name"
+            type='text'
             register={register}
             error={errors.full_name}
             className="w-full"
