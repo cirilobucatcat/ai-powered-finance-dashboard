@@ -36,7 +36,7 @@ export function FormInput<T extends FieldValues>({
             id={name}
             type={type}
             placeholder={placeholder}
-            className={`w-full border-2 rounded-sm bg-slate-800 border-electric-lime outline-electric-lime text-slate-50 p-3 text-sm ${className} ${prependIcon ? 'pl-8' : 'px-3'}`}
+            className={`w-full form-input ${className} ${prependIcon ? '!pl-8' : '!px-3'}`}
             {...register(name)}
           />
       }

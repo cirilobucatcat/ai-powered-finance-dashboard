@@ -7,6 +7,7 @@ import Dashboard from './pages/main/Dashboard';
 import { Toaster } from 'react-hot-toast';
 import { customToasterProps } from './utils/constants';
 import Insights from './pages/main/Insights';
+import ProfileSettings from './pages/main/ProfileSettings';
 
 export default function App() {
 
@@ -35,6 +36,14 @@ export default function App() {
           element={
             <PrivateRoute>
               <Insights />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile-settings"
+          element={
+            <PrivateRoute>
+              <ProfileSettings />
             </PrivateRoute>
           }
         />

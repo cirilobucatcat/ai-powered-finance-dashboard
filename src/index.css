@@ -58,6 +58,10 @@ body {
   @apply cursor-pointer flex gap-4 items-center text-slate-50 w-full py-2 my-2;
 }
 
+.form-input {
+  @apply border-2 rounded-sm bg-slate-800 border-electric-lime outline-electric-lime text-slate-50 p-3 text-sm;
+}
+
 .popover-container {
   position: relative;
   display: inline-block;

@@ -1,5 +1,5 @@
 import { useAuth } from '@/context/AuthContext';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Profile from './Profile';
 
@@ -10,9 +10,11 @@ interface PrivateRouteProps {
 function PrivateRoute({ children }: PrivateRouteProps) {
 
     const { user } = useAuth();
+    const location = useLocation();
+
     return user ? <>
         <div className='flex w-full bg-slate-950'>
-            <Sidebar />
+            {location.pathname !== '/profile-settings' && <Sidebar />}
             <div className='w-full relative h-screen overflow-y-auto custom-scrollbar'>
                 <Profile />
                 {children}

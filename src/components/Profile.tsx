@@ -1,12 +1,14 @@
 import { useAuth } from '@/context/AuthContext'
 import Popover from './Popover'
 import { PiCaretDown } from "react-icons/pi";
-import { GoGear, GoSignOut  } from "react-icons/go";
-import { useNavigate } from 'react-router-dom';
+import { GoGear, GoSignOut } from "react-icons/go";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { IoIosArrowBack } from "react-icons/io";
 
 export default function Profile() {
-    const { user, logout } = useAuth()
+    const { user, logout } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
 
     const handleSignOut = async () => {
         await logout()
@@ -17,6 +19,10 @@ export default function Profile() {
 
     return (<div className="z-100 sticky top-0 right-2 h-20 sm:right-4 flex flex-row-reverse items-center gap-2 py-4 px-4 bg-slate-800">
         <div className="hidden md:flex items-center justify-center gap-x-4">
+            {location.pathname === '/profile-settings' && <button onClick={() => navigate(-1)} className='cursor-pointer text-electric-lime flex items-center justify-center mr-auto'>
+                <IoIosArrowBack size={20}/>
+                <p>Go Back</p>
+            </button>}
             <Popover
                 contentClass='!left-[-200%]'
                 content={
@@ -29,7 +35,7 @@ export default function Profile() {
                         </div>
 
                         <div className='flex flex-col gap-y-4 my-4 px-4 rounded-md'>
-                            <div className='w-full text-electric-lime flex flex-row items-center justify-start gap-x-2'>
+                            <div role='button' onClick={() => navigate('/profile-settings')} className='w-full text-electric-lime flex flex-row items-center justify-start gap-x-2 cursor-pointer'>
                                 <div className='size-6 flex items-center justify-center bg-electric-lime rounded-full'>
                                     <GoGear color='#000' />
                                 </div>
@@ -51,10 +57,10 @@ export default function Profile() {
                         className="rounded-full border-2 border-electric-lime group-hover:border-electric-lime/80 group-hover:transition-all"
                         alt="Profile pic"
                     />
-                    <PiCaretDown 
-                        className='absolute bottom-0 right-[-5%] bg-electric-lime group-hover:bg-electric-lime/80 rounded-full group-hover:transition-all' 
-                        color='#000' 
-                        size={18} 
+                    <PiCaretDown
+                        className='absolute bottom-0 right-[-5%] bg-electric-lime group-hover:bg-electric-lime/80 rounded-full group-hover:transition-all'
+                        color='#000'
+                        size={18}
                     />
                 </div>
             </Popover>
