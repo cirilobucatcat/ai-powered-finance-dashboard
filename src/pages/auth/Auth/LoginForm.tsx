@@ -50,6 +50,7 @@ export default function LoginForm() {
             })
             .finally(() => stopLoading())
     };
+    
     return (<form
         onSubmit={handleSubmit(onSubmit)}
         className="px-2 w-full sm:px-0 sm:w-1/2 h-3/4 flex flex-col items-center justify-start gap-4 font-open-sans"

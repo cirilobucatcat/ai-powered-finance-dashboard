@@ -1,4 +1,5 @@
 import { ModalProps } from '@/types';
+import { FirebaseError } from 'firebase/app';
 import { ToasterProps } from 'react-hot-toast';
 
 export const customToasterProps: ToasterProps = {
@@ -57,3 +58,10 @@ export const neonColors = [
   "#FF6B6B", // Bright Coral
   "#6F00FF"  // Neon Indigo
 ];
+
+export const firebaseErrors: Record<FirebaseError['code'], string> = {
+  'auth/wrong-password': 'Incorrect current password.',
+  'auth/requires-recent-login': 'Please log in again to update your password.',
+  'auth/operation-not-allowed': 'Please verify the new email before changing email.',
+  'auth/invalid-credential': 'Invalid email or password.'
+}
