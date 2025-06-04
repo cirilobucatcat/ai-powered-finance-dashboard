@@ -10,7 +10,7 @@ import { IoKeyOutline } from "react-icons/io5";
 import CustomButton from '@/components/CustomButton';
 import { useLoading } from '@/hooks/loading';
 import { useEffect } from 'react';
-import { EmailAuthProvider, reauthenticateWithCredential, sendEmailVerification, updateEmail, updatePassword, updateProfile } from 'firebase/auth';
+import { EmailAuthProvider, reauthenticateWithCredential, updatePassword, updateProfile } from 'firebase/auth';
 import { auth } from '@/firebase';
 import { useError } from '@/hooks/error';
 import toast from 'react-hot-toast';
@@ -19,6 +19,8 @@ const ProfileSettings = () => {
   const { user } = useAuth();
   const { isLoading, startLoading, stopLoading } = useLoading();
   const { displayMessage } = useError();
+  let currentUser = auth.currentUser;
+
   const {
     register,
     handleSubmit,
@@ -30,7 +32,6 @@ const ProfileSettings = () => {
 
   const onSubmit: SubmitHandler<ProfileSettingFormType> = async (data) => {
     startLoading()
-    let currentUser = auth.currentUser;
 
     if (currentUser) {
 
@@ -38,31 +39,25 @@ const ProfileSettings = () => {
         await updateProfile(currentUser, { displayName: data.displayName })
       }
 
-      if (currentUser.emailVerified) {
-        if (data.email && currentUser.email !== data.email) {
-          await updateEmail(currentUser, data.email)
-            .then(async () => {
-              sendEmailVerification(currentUser)
-                .then(console.log)
-                .catch(displayMessage)
-            })
-        }
-      } else {
-        sendEmailVerification(currentUser)
-      }
+      if (data.currentPassword && (data.password || data.email)) {
 
-      if (data.currentPassword && data.password) {
-
-        let newPassword = data.password
         const credential = EmailAuthProvider.credential(currentUser.email as string, data.currentPassword)
-
         await reauthenticateWithCredential(currentUser, credential)
           .then(async () => {
-            await updatePassword(currentUser, newPassword)
-              .then(() => {
-                toast.success('Password updated.')
-              })
-              .catch(displayMessage)
+
+            if (data.currentPassword && data.password) {
+
+              await updatePassword(currentUser, data.password)
+                .then(() => {
+                  setValue('currentPassword', '')
+                  setValue('password', '')
+                  setValue('confirmPassword', '')
+                  toast.success('Password updated.')
+                })
+                .catch(displayMessage)
+
+            }
+
           })
           .catch(displayMessage)
       }
@@ -128,24 +123,24 @@ const ProfileSettings = () => {
 
             <FormInput
               name="password"
-              label="Password"
+              label="New Password"
               type="password"
               register={register}
               error={errors.password}
               className="w-full"
-              placeholder="Enter your password"
+              placeholder="Enter your new password"
               containerClass="w-full"
               prependIcon={<IoKeyOutline color="#cfff04" size={20} />}
             />
 
             <FormInput
               name="confirmPassword"
-              label="Confirm Password"
+              label="Confirm New Password"
               type="password"
               register={register}
               error={errors.confirmPassword}
               className="w-full"
-              placeholder="Confirm your password"
+              placeholder="Confirm your new password"
               containerClass="w-full"
               prependIcon={<IoKeyOutline color="#cfff04" size={20} />}
             />
